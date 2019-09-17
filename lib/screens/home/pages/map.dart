@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geople/app_localizations.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -10,8 +11,13 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Icon(Icons.map),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Icon(Icons.map),
+        Text(AppLocalizations.of(context).translate('helloWorld')),
+      ],
     );
   }
 }

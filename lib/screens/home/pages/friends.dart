@@ -10,8 +10,13 @@ class FriendsPage extends StatefulWidget {
 class _FriendsPageState extends State<FriendsPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-          child: Icon(Icons.people_outline),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Icon(Icons.people),
+        Text('GeopleFriends'),
+      ],
     );
   }
 }

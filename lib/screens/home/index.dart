@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:geople/screens/home/widgets/floating_action_button_builder.dart';
 import 'package:toast/toast.dart';
+
+import 'package:geople/screens/home/widgets/floating_action_button_builder.dart';
 import 'package:geople/screens/home/pages/exports.dart';
+import 'package:geople/widgets/meatball_menu_main.dart';
+
 
 
 /// Widget für die Homepage der App. Sie ist 'Stateful' was bedeutet, dass es
@@ -31,33 +34,21 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   @override
-  void dispose() {
-    _tabController.removeListener(_handleTabIndex);
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  void _handleTabIndex() {
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
+      bottom: false,
       child: Scaffold(
         appBar: AppBar(
-
-          /// Hier wird auf das Attribut des stateful Widgets zugegriffen.
+          ///
+          actions: <Widget>[
+            MeatballMenuMain(),
+          ],
+          /// Hier wird auf das Attribut des Widgets('widget') zugegriffen.
           title: Text(widget._title),
-          bottom: TabBar(
-              controller: _tabController,
-              tabs: [
-                Tab(icon: Icon(Icons.map)),
-                Tab(icon: Icon(Icons.chat)),
-                Tab(icon: Icon(Icons.people)),
-              ]),
         ),
         body: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
           controller: _tabController,
           children: [
             MapPage(),
@@ -65,6 +56,14 @@ class _HomeScreenState extends State<HomeScreen>
             FriendsPage(),
           ],
         ),
+        resizeToAvoidBottomPadding: true,
+        bottomNavigationBar:  TabBar(
+            controller: _tabController,
+            tabs: [
+              Tab(icon: Icon(Icons.map) ),
+              Tab(icon: Icon(Icons.chat)),
+              Tab(icon: Icon(Icons.people)),
+            ]),
         floatingActionButton: buildFABForTab(
             _tabController.index,
             _broadcastMessage
@@ -73,11 +72,25 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
+  /// TabController sauber löschen.
+  @override
+  void dispose() {
+    _tabController.removeListener(_handleTabIndex);
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  /// State bei einem TabIndex-Wechsel neu laden.
+  void _handleTabIndex() {
+    setState(() {});
+  }
+
+  // Todo: implement message broadcast.
   _broadcastMessage() {
     Toast.show(
-        _tabController.index.toString(),
+        'MESSAGE BROADCASTING YET TO BE IMPLEMENTED!',
         context,
-        duration: Toast.LENGTH_SHORT,
+        duration: Toast.LENGTH_LONG,
         gravity: Toast.BOTTOM
     );
     this.setState(() {});

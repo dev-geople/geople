@@ -10,8 +10,13 @@ class ChatsPage extends StatefulWidget {
 class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Icon(Icons.chat),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Icon(Icons.chat),
+        Text('GeopleChat'),
+      ],
     );
   }
 }
