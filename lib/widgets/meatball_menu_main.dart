@@ -1,25 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../app_localizations.dart';
+class MeatballMenuMain extends StatelessWidget {
+  MeatballMenuMain({this.context});
 
-class MeatballMenuMain extends StatefulWidget {
-
-  @override
-  State<StatefulWidget> createState() {
-    return MeatballMenuMainState();
-  }
-}
-
-class MeatballMenuMainState extends State<MeatballMenuMain> {
+  final BuildContext context;
 
   @override
   Widget build(BuildContext context) {
-
-    List<Choice> choices = <Choice>[
-      Choice(AppLocalizations.of(context).translate('profile'), '/profile'),
-      Choice(AppLocalizations.of(context).translate('settings'), '/settings'),
-    ];
-
     return PopupMenuButton<Choice>(
       /// Wenn auf eines der Menuitems getappt wird, wird diese Methode
       /// aufgerufen und als wert die Choice mitgegeben.
@@ -47,12 +34,13 @@ class MeatballMenuMainState extends State<MeatballMenuMain> {
 
 /// ModelKlasse für die wählbaren Menuitems.
 class Choice {
-  Choice(String title, String route){
-    this.title = title;
-    this.route = route;
-  }
+  const Choice({this.title, this.route});
 
-  String title;
-  String route;
+  final String title;
+  final String route;
 }
 
+const List<Choice> choices = const <Choice>[
+  const Choice(title: 'Profile', route: '/profile'),
+  const Choice(title: 'Settings', route: '/settings'),
+];
