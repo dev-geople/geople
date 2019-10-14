@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "763120344764",
+    "firebase_url": "https://geople-app.firebaseio.com",
+    "project_id": "geople-app",
+    "storage_bucket": "geople-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:763120344764:android:a458576091f9cd0d75fab9",
+        "android_client_info": {
+          "package_name": "ch.devgeople.geople"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "763120344764-s4gt36gohie386m6o8vbfbein5so7d1o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDF_2xj1d6R9NvuD-FlHb2kdJuwcFTBodo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "763120344764-s4gt36gohie386m6o8vbfbein5so7d1o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "763120344764-apcipqtu5q052424becnap3iq198ipjg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ch.ogolol.geople"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
