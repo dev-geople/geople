@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen>
         bottomNavigationBar:  TabBar(
             controller: _tabController,
             tabs: [
-              Tab(icon: Icon(Icons.map) ),
+              Tab(icon: Icon(Icons.map)),
               Tab(icon: Icon(Icons.chat)),
               Tab(icon: Icon(Icons.people)),
             ]),

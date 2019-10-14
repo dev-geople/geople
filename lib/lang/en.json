@@ -1,3 +1,5 @@
 {
-  "helloWorld": "Hello World in English!"
+  "helloWorld": "Hello World in English!",
+  "settings": "Settings",
+  "profile": "Profile"
 }
