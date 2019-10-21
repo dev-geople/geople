@@ -1,8 +1,11 @@
 {
   "helloWorld": "Hallo Welt in Deutsch!",
+  "username_label": "Nutzername",
   "email_label": "Email",
   "password_label": "Passwort",
+  "confirm_password_label": "Passwort Bestätigen",
   "save_button_text": "Speichern",
   "login_button_text": "Anmelden",
-  "create_account_button_text": "Konto Erstellen"
+  "create_account_button_text": "Konto Erstellen",
+  "cancel_button_text": "Abbrechen"
 }

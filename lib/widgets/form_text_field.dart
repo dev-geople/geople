@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class FormTextfield extends StatelessWidget{
-  FormTextfield({this.label, this.controller, this.isMandatory });
+  FormTextfield({this.label, this.controller, this.isMandatory, this.icon, this.additionalValidation});
 
   final bool isMandatory;
   final String label;
   final TextEditingController controller;
+  final Icon icon;
+  final Function additionalValidation;
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +18,7 @@ class FormTextfield extends StatelessWidget{
         controller: controller,
         style: TextStyle(fontSize: 16),
         decoration: InputDecoration(
+          prefixIcon: icon,
             labelText: label,
             labelStyle: TextStyle(color: Colors.black87),
             border: OutlineInputBorder(
@@ -35,9 +38,14 @@ class FormTextfield extends StatelessWidget{
               borderSide: BorderSide(color: Colors.black54),
             )),
         validator: (value) {
-          if (value.isEmpty && isMandatory) {
-            return 'Dieses Feld darf nicht leer sein!'; //Todo: Übersetzung
-          }
+          String _errorMessage = this.additionalValidation != null
+              ? this.additionalValidation(value)
+              : null;
+          if(_errorMessage == null) {
+            if (value.isEmpty && isMandatory) {
+              return 'Dieses Feld darf nicht leer sein!'; //Todo: Übersetzung
+            }
+          } else return _errorMessage;
         },
       ),
     );

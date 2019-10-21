@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../routes.dart';
+
 class MeatballMenuMain extends StatelessWidget {
   MeatballMenuMain({this.context});
 
@@ -41,7 +43,7 @@ class Choice {
 }
 
 const List<Choice> choices = const <Choice>[
-  const Choice(title: 'Profile', route: '/profile'),
-  const Choice(title: 'Settings', route: '/settings'),
-  const Choice(title: 'Login', route: '/login'),
+  const Choice(title: 'Profile', route: Routes.PROFILE),
+  const Choice(title: 'Settings', route: Routes.SETTINGS),
+  const Choice(title: 'Login', route: Routes.SIGN_IN),
 ];
