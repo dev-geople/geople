@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:geople/routes.dart';
 import 'package:geople/screens/home/index.dart';
 import 'package:geople/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'assets/theme_main.dart';
 
 
 void main() => runApp(Geople());
@@ -12,10 +15,8 @@ class Geople extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp (
       title: 'Geople',
-      theme: ThemeData(
-        // Todo: primarySwatch erstellen (Theming)
-        primaryColor: Colors.white, // Das 'Theme' der App.
-      ),
+      theme: lightTheme,
+      routes: routes,
       // List all of the app's supported locales here
       supportedLocales: [
         Locale('en', ''),

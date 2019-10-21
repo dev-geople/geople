@@ -43,4 +43,5 @@ class Choice {
 const List<Choice> choices = const <Choice>[
   const Choice(title: 'Profile', route: '/profile'),
   const Choice(title: 'Settings', route: '/settings'),
+  const Choice(title: 'Login', route: '/login'),
 ];

@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen>
         appBar: AppBar(
           ///
           actions: <Widget>[
-            MeatballMenuMain(),
+            MeatballMenuMain(context: this.context,),
           ],
           /// Hier wird auf das Attribut des Widgets('widget') zugegriffen.
           title: Text(widget._title),
@@ -66,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen>
             ]),
         floatingActionButton: buildFABForTab(
             _tabController.index,
+            context,
             _broadcastMessage
         ),
       ),
