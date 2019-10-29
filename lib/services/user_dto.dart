@@ -1,6 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+const USER_COLLECTION = 'user';
+
 class UserDTO {
-  createUser(String uid, String username) {
+  Future<DocumentReference> createUser(String uid, String username) {
     //Todo: Save user in database.
-    print('User ' + uid + ' mit dem Namen ' + username + ' wurde erstellt.');
+    return Firestore.instance.collection(USER_COLLECTION).add({
+      'uid': uid,
+      'username': username,
+    });
   }
 }

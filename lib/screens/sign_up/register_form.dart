@@ -77,7 +77,9 @@ class _RegisterFormState extends State<RegisterForm> {
                   _formControllers['password'].text,
                 ).then((uid) {
                   UserDTO _dao = UserDTO();
-                  _dao.createUser(uid, _formControllers['username'].text);
+                  _dao.createUser(uid, _formControllers['username'].text).then(
+                      (documentReference) => print(documentReference.toString())
+                  );
                   Navigator.of(context).pushReplacementNamed(Routes.HOME);
                 }).catchError((e) =>
                     print(e.toString())); // Todo: Fehlermeldungen
