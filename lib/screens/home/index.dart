@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geople/services/authentication.dart';
 import 'package:toast/toast.dart';
 
 import 'package:geople/screens/home/widgets/floating_action_button_builder.dart';
@@ -35,9 +36,11 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    Auth _auth = Auth();
+    _auth.ensureIsLoggedIn(context);
+
     return SafeArea(
       top: false,
-      bottom: false,
       child: Scaffold(
         appBar: AppBar(
           ///

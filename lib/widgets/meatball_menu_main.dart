@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geople/services/authentication.dart';
 
 import '../routes.dart';
 
@@ -28,6 +29,13 @@ class MeatballMenuMain extends StatelessWidget {
   }
 
   void _onSelectMenu(Choice choice) {
+    if(choice.route == '/sign_out') {
+      Auth _auth = Auth();
+      _auth.signOut();
+      Navigator.of(context).pushReplacementNamed(Routes.SIGN_IN);
+      return;
+    }
+
     /// Router
     if (ModalRoute.of(context).settings.name != choice.route)
       Navigator.of(context).pushNamed(choice.route);
@@ -45,5 +53,5 @@ class Choice {
 const List<Choice> choices = const <Choice>[
   const Choice(title: 'Profile', route: Routes.PROFILE),
   const Choice(title: 'Settings', route: Routes.SETTINGS),
-  const Choice(title: 'Login', route: Routes.SIGN_IN),
+  const Choice(title: 'Logout', route: '/sign_out'),
 ];

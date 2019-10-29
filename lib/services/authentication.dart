@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:geople/routes.dart';
 
 // Abstrakte Klasse für AuthenticationService
 abstract class BaseAuth {
@@ -40,6 +42,15 @@ class Auth implements BaseAuth {
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
     return user;
+  }
+
+  /// Checkt ob der User eingellogt ist und leitet um, falls dies nicht
+  /// der Fall ist.
+  Future<void> ensureIsLoggedIn(BuildContext context) async {
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    if(user == null) {
+      Navigator.of(context).pushReplacementNamed(Routes.SIGN_IN);
+    }
   }
 
   /// Meldet den im Moment eingeloggten User ab.

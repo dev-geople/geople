@@ -50,8 +50,8 @@ class LoginFormState extends State<LoginForm> {
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                   ),*/
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Text(AppLocalizations.of(context).translate('login_label'), style: Theme.of(context).textTheme.title,),
             _loginForm,
             Center(
               child: RoundedButtonPrimary(
@@ -61,15 +61,20 @@ class LoginFormState extends State<LoginForm> {
                   FocusScope.of(context).requestFocus(FocusNode());
                   // Validation
                   if(_formKey.currentState.validate()) {
-                    Scaffold.of(context).showSnackBar(SnackBar(content: Text('ayy')));
+                    Scaffold.of(context).showSnackBar(
+                        SnackBar(content: Text('ayy')));
+
+                    //Sign in
+                    widget._auth.signIn(
+                        _formControllers['email'].text,
+                        _formControllers['password'].text
+                    ).then((uid) {
+                      if (uid != null) {
+                        Navigator.of(context).pushReplacementNamed(Routes.HOME);
+                      }
+                    }).catchError((e) =>
+                        print(e.toString())); // Todo: Fehlermeldungen
                   }
-                  //Sign in
-                  widget._auth.signIn(
-                      _formControllers['email'].text,
-                      _formControllers['password'].text
-                    // Todo: redirect to MainScreen
-                  ).then((uid) => print('Todo: umleiten'))
-                      .catchError((e) => print(e.toString()));  // Todo: Fehlermeldungen
                 },
               ),
             ),

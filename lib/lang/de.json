@@ -4,8 +4,13 @@
   "email_label": "Email",
   "password_label": "Passwort",
   "confirm_password_label": "Passwort Bestätigen",
+  "login_label": "Anmelden",
+  "register_label": "Neuen Account erstellen",
+
   "save_button_text": "Speichern",
   "login_button_text": "Anmelden",
-  "create_account_button_text": "Konto Erstellen",
-  "cancel_button_text": "Abbrechen"
+  "create_account_button_text": "Account Erstellen",
+  "cancel_button_text": "Abbrechen",
+
+  "error_empty": "Dieses Feld darf nicht leer sein!"
 }

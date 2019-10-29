@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geople/app_localizations.dart';
 
 class FormTextfield extends StatelessWidget{
   FormTextfield({this.label, this.controller, this.isMandatory, this.icon, this.additionalValidation});
@@ -22,10 +23,10 @@ class FormTextfield extends StatelessWidget{
             labelText: label,
             labelStyle: TextStyle(color: Colors.black87),
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(9)),
+                borderRadius: BorderRadius.all(Radius.circular(5)),
                 borderSide: BorderSide(
                     color: Colors.black54,
-                    width: 1.8,
+                    width: 3,
                     style: BorderStyle.solid)),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(9)),
@@ -43,7 +44,7 @@ class FormTextfield extends StatelessWidget{
               : null;
           if(_errorMessage == null) {
             if (value.isEmpty && isMandatory) {
-              return 'Dieses Feld darf nicht leer sein!'; //Todo: Übersetzung
+              return AppLocalizations.of(context).translate('error_empty'); //Todo: Übersetzung
             }
           } else return _errorMessage;
         },

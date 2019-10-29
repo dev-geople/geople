@@ -13,7 +13,6 @@ class _LoginScreenState extends State<LoginScreen> {
       top: false,
       bottom: false,
       child: Scaffold(
-        //resizeToAvoidBottomPadding: false,
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
