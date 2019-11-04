@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geople/app_localizations.dart';
+import 'package:geople/helper/validator.dart';
 import 'package:geople/routes.dart';
 import 'package:geople/services/authentication.dart';
 import 'package:geople/services/user_dto.dart';
@@ -22,7 +23,8 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    // Todo: Validate
+    Validator validator = new Validator();
+
     final _registerForm = Form(
       key: _formKey,
       child: Column(
@@ -33,24 +35,40 @@ class _RegisterFormState extends State<RegisterForm> {
             isMandatory: true,
             controller: _formControllers['username'],
             icon: Icon(Icons.person),
+            additionalValidation: (value) {
+              if (validator.validateUsername(value)) {
+                return 'Der Nutzername muss aus mindestens 5 Zeichen bestehen'; //Todo: translate
+              }
+            },
           ),
           FormTextfield(
             label: AppLocalizations.of(context).translate('email_label'),
             isMandatory: true,
             controller: _formControllers['email'],
             icon: Icon(Icons.email),
+            keyboardType: TextInputType.emailAddress,
+            additionalValidation: (value) {
+              if(!validator.validateEmail(value))
+                return 'Invalide Emailadresse'; //Todo: translate
+            },
           ),
           FormTextfield(
             label: AppLocalizations.of(context).translate('password_label'),
             isMandatory: true,
             controller: _formControllers['password'],
             icon: Icon(Icons.lock),
+            hide: true,
+            additionalValidation: (){
+              
+            },
           ),
           FormTextfield(
-            label: AppLocalizations.of(context).translate('confirm_password_label'),
+            label: AppLocalizations.of(context)
+                .translate('confirm_password_label'),
             isMandatory: true,
             controller: _formControllers['confirm-password'],
             icon: Icon(Icons.lock_outline),
+            hide: true,
           ),
         ],
       ),
@@ -61,7 +79,10 @@ class _RegisterFormState extends State<RegisterForm> {
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       child: Column(
         children: <Widget>[
-          Text(AppLocalizations.of(context).translate('register_label'), style: Theme.of(context).textTheme.title,),
+          Text(
+            AppLocalizations.of(context).translate('register_label'),
+            style: Theme.of(context).textTheme.title,
+          ),
           _registerForm,
           RoundedButtonPrimary(
             translatorKey: 'create_account_button_text',
@@ -69,20 +90,22 @@ class _RegisterFormState extends State<RegisterForm> {
               //Hide Keyboard
               FocusScope.of(context).requestFocus(FocusNode());
               // Register
-              if(_formKey.currentState.validate()) {
+              if (_formKey.currentState.validate()) {
                 Auth _auth = Auth();
                 //TODO: Validate
-                _auth.signUp(
+                _auth
+                    .signUp(
                   _formControllers['email'].text,
                   _formControllers['password'].text,
-                ).then((uid) {
+                )
+                    .then((uid) {
                   UserDTO _dao = UserDTO();
                   _dao.createUser(uid, _formControllers['username'].text).then(
-                      (documentReference) => print(documentReference.toString())
-                  );
+                      (documentReference) =>
+                          print(documentReference.toString()));
                   Navigator.of(context).pushReplacementNamed(Routes.HOME);
-                }).catchError((e) =>
-                    print(e.toString())); // Todo: Fehlermeldungen
+                }).catchError(
+                        (e) => print(e.toString())); // Todo: Fehlermeldungen
               }
             },
           ),

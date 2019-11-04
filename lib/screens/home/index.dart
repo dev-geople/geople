@@ -36,6 +36,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    /// Prüft, ob der User eingeloggt ist und leitet ihn auf die Login-Seite um
+    /// falls nicht.
     Auth _auth = Auth();
     _auth.ensureIsLoggedIn(context);
 

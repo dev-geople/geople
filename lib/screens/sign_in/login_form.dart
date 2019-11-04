@@ -37,6 +37,7 @@ class LoginFormState extends State<LoginForm> {
             controller: _formControllers['password'],
             isMandatory: true,
             icon: Icon(Icons.lock),
+            hide: true,
           ),
         ],
       ),
