@@ -11,4 +11,9 @@ class Validator {
     RegExp regex = new RegExp(USERNAME_PATTERN);
     return regex.hasMatch(username) && username.length >= 5;
   }
+
+  bool validatePassword(String password) {
+    //Todo: REGEX
+    return password.length > 7;
+  }
 }

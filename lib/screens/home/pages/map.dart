@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geople/app_localizations.dart';
+import 'package:geople/services/geople_cloud_functions.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -17,6 +18,13 @@ class _MapPageState extends State<MapPage> {
       children: <Widget>[
         Icon(Icons.map),
         Text(AppLocalizations.of(context).translate('helloWorld')),
+        RaisedButton(onPressed: () {
+          //TODO: Freundesanfrage auslagern
+        GeopleCloudFunctions().sendFriendRequest('dahjalslsalsad')
+            .then((result) {
+              print(result?.data['message']);
+            });
+        }),
       ],
     );
   }

@@ -58,8 +58,9 @@ class _RegisterFormState extends State<RegisterForm> {
             controller: _formControllers['password'],
             icon: Icon(Icons.lock),
             hide: true,
-            additionalValidation: (){
-              
+            additionalValidation: (value) {
+              if(!validator.validatePassword(value))
+                return 'Passwort nicht sicher genug'; //Todo: translate
             },
           ),
           FormTextfield(
@@ -93,12 +94,10 @@ class _RegisterFormState extends State<RegisterForm> {
               if (_formKey.currentState.validate()) {
                 Auth _auth = Auth();
                 //TODO: Validate
-                _auth
-                    .signUp(
+                _auth.signUp(
                   _formControllers['email'].text,
                   _formControllers['password'].text,
-                )
-                    .then((uid) {
+                ).then((uid) {
                   UserDTO _dao = UserDTO();
                   _dao.createUser(uid, _formControllers['username'].text).then(
                       (documentReference) =>

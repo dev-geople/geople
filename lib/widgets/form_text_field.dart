@@ -52,10 +52,8 @@ class FormTextfield extends StatelessWidget {
           if (value.isEmpty && isMandatory) {
             return AppLocalizations.of(context)
                 .translate('error_empty'); //Todo: Übersetzung
-          } else {
-            String _errorMessage = this.additionalValidation != null
-                ? this.additionalValidation(value)
-                : null;
+          } else if(additionalValidation != null){
+            String _errorMessage = this.additionalValidation(value);
             return _errorMessage;
           }
         },
