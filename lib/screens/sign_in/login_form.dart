@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geople/app_localizations.dart';
-import 'package:geople/routes.dart';
+import 'package:geople/router.dart';
 import 'package:geople/services/authentication.dart';
 import 'package:geople/widgets/form_text_field.dart';
 import 'package:geople/widgets/rounded_buttons.dart';

@@ -12,5 +12,9 @@
   "create_account_button_text": "Create Account",
   "cancel_button_text": "Cancel",
 
-  "error_empty": "This field can't be empty!"
+  "error_empty": "This field can't be empty!",
+  "error_unmet_email_policy": "invalid email address!",
+  "error_unmet_password_policy": "password isn't save enough!",
+  "error_passwords_match": "passwords don't match!",
+  "error_unmet_username_policy": "Username must have at least 5 Characters!"
 }

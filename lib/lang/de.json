@@ -12,5 +12,9 @@
   "create_account_button_text": "Account Erstellen",
   "cancel_button_text": "Abbrechen",
 
-  "error_empty": "Dieses Feld darf nicht leer sein!"
+  "error_empty": "Dieses Feld darf nicht leer sein!",
+  "error_unmet_email_policy": "Invalide Email!",
+  "error_unmet_password_policy": "Das Passwort ist nicht sicher genug!",
+  "error_passwords_match": "Passwörter stimmen nicht überein!",
+  "error_unmet_username_policy": "Der Nutzername muss aus mindestens 5 Zeichen bestehen!"
 }

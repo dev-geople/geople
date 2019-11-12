@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:geople/routes.dart';
+import 'package:geople/router.dart' as router;
 import 'package:geople/screens/home/index.dart';
 import 'package:geople/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:geople/screens/sign_in/index.dart';
 import 'package:geople/services/authentication.dart';
+import 'package:geople/services/notification_manager.dart';
 
 import 'assets/theme_main.dart';
 
@@ -29,7 +30,7 @@ class Geople extends StatelessWidget {
     return MaterialApp (
       title: 'Geople',
       theme: lightTheme,
-      routes: routes,
+      onGenerateRoute: router.generateRoute,
       // List all of the app's supported locales here
       supportedLocales: [
         Locale('en', ''),

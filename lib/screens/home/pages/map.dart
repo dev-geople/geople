@@ -18,13 +18,6 @@ class _MapPageState extends State<MapPage> {
       children: <Widget>[
         Icon(Icons.map),
         Text(AppLocalizations.of(context).translate('helloWorld')),
-        RaisedButton(onPressed: () {
-          //TODO: Freundesanfrage auslagern
-        GeopleCloudFunctions().sendFriendRequest('dahjalslsalsad')
-            .then((result) {
-              print(result?.data['message']);
-            });
-        }),
       ],
     );
   }

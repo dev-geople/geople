@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:geople/services/authentication.dart';
+import 'package:geople/services/notification_manager.dart';
 import 'package:toast/toast.dart';
 
 import 'package:geople/screens/home/widgets/floating_action_button_builder.dart';
 import 'package:geople/screens/home/pages/exports.dart';
 import 'package:geople/widgets/meatball_menu_main.dart';
-
 
 
 /// Widget für die Homepage der App. Sie ist 'Stateful' was bedeutet, dass es
@@ -30,6 +30,9 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     // Tabs initialisieren
+    final _notificationManager = PushNotificationsManager();
+    _notificationManager.init();
+
     _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
     _tabController.addListener(_handleTabIndex);
   }
@@ -91,14 +94,7 @@ class _HomeScreenState extends State<HomeScreen>
     setState(() {});
   }
 
-  // Todo: implement message broadcast.
   _broadcastMessage() {
-    Toast.show(
-        'MESSAGE BROADCASTING YET TO BE IMPLEMENTED!',
-        context,
-        duration: Toast.LENGTH_LONG,
-        gravity: Toast.BOTTOM
-    );
-    this.setState(() {});
+
   }
 }

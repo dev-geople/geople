@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:geople/routes.dart';
+import 'package:geople/router.dart';
 
 // Abstrakte Klasse für AuthenticationService
 abstract class BaseAuth {

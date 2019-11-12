@@ -1,7 +1,8 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geople/app_localizations.dart';
 import 'package:geople/helper/validator.dart';
-import 'package:geople/routes.dart';
+import 'package:geople/router.dart';
 import 'package:geople/services/authentication.dart';
 import 'package:geople/services/user_dto.dart';
 import 'package:geople/widgets/form_text_field.dart';
@@ -35,9 +36,10 @@ class _RegisterFormState extends State<RegisterForm> {
             isMandatory: true,
             controller: _formControllers['username'],
             icon: Icon(Icons.person),
+            // ignore: missing_return
             additionalValidation: (value) {
-              if (validator.validateUsername(value)) {
-                return 'Der Nutzername muss aus mindestens 5 Zeichen bestehen'; //Todo: translate
+              if (!validator.validateUsername(value)) {
+                return AppLocalizations.of(context).translate('error_unmet_username_policy');
               }
             },
           ),
@@ -47,9 +49,10 @@ class _RegisterFormState extends State<RegisterForm> {
             controller: _formControllers['email'],
             icon: Icon(Icons.email),
             keyboardType: TextInputType.emailAddress,
+            // ignore: missing_return
             additionalValidation: (value) {
               if(!validator.validateEmail(value))
-                return 'Invalide Emailadresse'; //Todo: translate
+                return AppLocalizations.of(context).translate('error_unmet_email_policy');
             },
           ),
           FormTextfield(
@@ -58,9 +61,10 @@ class _RegisterFormState extends State<RegisterForm> {
             controller: _formControllers['password'],
             icon: Icon(Icons.lock),
             hide: true,
+            // ignore: missing_return
             additionalValidation: (value) {
               if(!validator.validatePassword(value))
-                return 'Passwort nicht sicher genug'; //Todo: translate
+                return AppLocalizations.of(context).translate('error_unmet_password_policy');
             },
           ),
           FormTextfield(
@@ -70,6 +74,11 @@ class _RegisterFormState extends State<RegisterForm> {
             controller: _formControllers['confirm-password'],
             icon: Icon(Icons.lock_outline),
             hide: true,
+            // ignore: missing_return
+            additionalValidation: (value) {
+              if(!validator.validatePasswordMatch(value, _formControllers['password'].text))
+                return AppLocalizations.of(context).translate('error_passwords_match');
+            },
           ),
         ],
       ),
@@ -99,10 +108,13 @@ class _RegisterFormState extends State<RegisterForm> {
                   _formControllers['password'].text,
                 ).then((uid) {
                   UserDTO _dao = UserDTO();
-                  _dao.createUser(uid, _formControllers['username'].text).then(
-                      (documentReference) =>
-                          print(documentReference.toString()));
-                  Navigator.of(context).pushReplacementNamed(Routes.HOME);
+                  FirebaseMessaging _messager = FirebaseMessaging();
+                  _messager.getToken().then((token) {
+                    _dao.createUser(uid, _formControllers['username'].text, token)
+                    .then((ref) {
+                      Navigator.of(context).pushReplacementNamed(Routes.HOME);
+                    });
+                  });
                 }).catchError(
                         (e) => print(e.toString())); // Todo: Fehlermeldungen
               }
