@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:geople/app_localizations.dart';
-import 'package:geople/services/geople_cloud_functions.dart';
 
 class MapPage extends StatefulWidget {
   @override

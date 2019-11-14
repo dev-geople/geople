@@ -62,6 +62,7 @@ class Choice {
 const List<Choice> choices = const <Choice>[
   const Choice(title: 'Profile', route: Routes.PROFILE),
   const Choice(title: 'Settings', route: Routes.SETTINGS),
+  const Choice(title: 'Chat', route: Routes.CHAT),
   const Choice(title: 'Logout', route: '/sign_out'),
   const Choice(title: '{DEBUG}', route: '/debug'),
 ];

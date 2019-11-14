@@ -48,10 +48,11 @@ class FormTextfield extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(5)),
               borderSide: BorderSide(color: Colors.black54),
             )),
+        // ignore: missing_return
         validator: (value) {
           if (value.isEmpty && isMandatory) {
             return AppLocalizations.of(context)
-                .translate('error_empty'); //Todo: Übersetzung
+                .translate('error_empty');
           } else if(additionalValidation != null){
             String _errorMessage = this.additionalValidation(value);
             return _errorMessage;
