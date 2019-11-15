@@ -1,7 +1,10 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geople/app_localizations.dart';
 import 'package:geople/router.dart';
 import 'package:geople/services/authentication.dart';
+import 'package:geople/services/notification_manager.dart';
+import 'package:geople/services/user_dto.dart';
 import 'package:geople/widgets/form_text_field.dart';
 import 'package:geople/widgets/rounded_buttons.dart';
 
@@ -62,15 +65,15 @@ class LoginFormState extends State<LoginForm> {
                   FocusScope.of(context).requestFocus(FocusNode());
                   // Validation
                   if(_formKey.currentState.validate()) {
-                    Scaffold.of(context).showSnackBar(
-                        SnackBar(content: Text('ayy')));
-
                     //Sign in
                     widget._auth.signIn(
                         _formControllers['email'].text,
                         _formControllers['password'].text
-                    ).then((uid) {
+                    ).then((uid) async {
                       if (uid != null) {
+                        UserDTO _dto = UserDTO();
+                        FirebaseMessaging _messager = FirebaseMessaging();
+                        _dto.saveToken(uid, await _messager.getToken());
                         Navigator.of(context).pushReplacementNamed(Routes.HOME);
                       }
                     }).catchError((e) =>

@@ -16,6 +16,12 @@ class UserTile extends StatelessWidget {
       },
       title: Text(user.username??''),
       subtitle: Text(user.status??''),
+      trailing: IconButton(
+          icon: Icon(Icons.chat),
+          onPressed: () {
+            Navigator.of(context).pushNamed(Routes.CHAT, arguments: user.uid);
+          },
+      ),
     );
   }
 }

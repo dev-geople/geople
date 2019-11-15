@@ -26,4 +26,5 @@ class UserDTO {
   Future<DocumentSnapshot> getUserDetails(String uid) {
     return Firestore.instance.collection(USER_COLLECTION).document(uid).get();
   }
+
 }
