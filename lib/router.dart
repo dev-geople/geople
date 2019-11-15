@@ -33,7 +33,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       var uid = settings.arguments;
       return MaterialPageRoute(builder: (context) => ProfileScreen(uid: uid));
     default:
-      return MaterialPageRoute(builder: (context) => HomeScreen());
+     // return MaterialPageRoute(builder: (context) => HomeScreen());
+      return null;
   }
 }
 
