@@ -18,7 +18,7 @@ class MessageRepository {
     this.initilizeDB();
   }
 
-  void initilizeDB() async {
+  Future<void> initilizeDB() async {
     var databasesPath = await getDatabasesPath();
     this.path = databasesPath + this.fileName; //Todo: möglicherweise Fehler (/)
     this.db = await openDatabase(path, version: 1,
@@ -38,17 +38,18 @@ class MessageRepository {
     );
   }
 
-  Future<int> saveMessage(Message message) async {
-    var id = await db.insert(this.tableMessages, message.toMap());
+  Future<Message> saveMessage(Message message) async {
+    await db.insert(this.tableMessages, message.toMap());
     print('MESSAGE SAVED: $message.$toString()');
-    return id;
+    return message;
   }
-  List<Message> messages = new List<Message>();
 
   Future<List<Message>> getMessagesOfUser(String uid) async {
+    List<Message> messages = new List<Message>();
+    if(db == null) await this.initilizeDB();
     List<Map> maps = await db.query(this.tableMessages,
       columns: [columnMessage, columnFrom, columnTo, columnTimestamp],
-      where: '$columnFrom = ? or $columnTo = ?',
+      where: '$columnFrom = ? OR $columnTo = ?',
       whereArgs: [uid, uid],
     );
     if(maps.length > 0) {
@@ -61,6 +62,7 @@ class MessageRepository {
   }
 
   Future<bool> printMessages(String uid) async {
+    List<Message> messages = new List<Message>();
     List<Map> maps = await db.query(this.tableMessages,
       columns: [columnMessage, columnFrom, columnTo, columnTimestamp],
       where: '$columnFrom = ? or $columnTo = ?',
@@ -70,7 +72,6 @@ class MessageRepository {
       maps.forEach((e){
         messages.add(Message.fromMap(e));
       });
-      print(messages.toString());
     }
     return true;
   }

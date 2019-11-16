@@ -6,6 +6,8 @@ import 'package:geople/screens/chat/widgets/message.dart';
 import 'package:geople/services/geople_cloud_functions.dart';
 import 'package:geople/services/user_dto.dart';
 
+//TODO: Beim Empfangen einer NAchricht, diese anzeigen.
+
 class ChatScreen extends StatefulWidget {
   ChatScreen({this.uid});
 
@@ -22,20 +24,7 @@ class _ChatScreenState extends State<ChatScreen> {
   GeopleCloudFunctions _cloudFunctions = GeopleCloudFunctions();
   MessageRepository _messageRepository = MessageRepository();
 
-  List<MessageWidget> _messages = [
-    MessageWidget(
-      message: Message(
-        message: 'This is my first Message',
-        from: Message.ME,
-      ),
-    ),
-    MessageWidget(
-      message: Message(
-        message: 'next one',
-        from: 'sdoaihbnfiuasdhd',
-      ),
-    )
-  ];
+  List<MessageWidget> _messages = List<MessageWidget>();
 
   @override
   void initState() {
@@ -44,9 +33,63 @@ class _ChatScreenState extends State<ChatScreen> {
       if (snapshot.data != null) {
         GeopleUser user = GeopleUser();
         user.toObject(snapshot.data);
-        setState(() {
-          _user = user;
-        });
+        user.uid = widget.uid;
+        //Todo: onerror
+        _messageRepository.getMessagesOfUser(user.uid)
+            .then((messageList) {
+              if(messageList != null) {
+                _messages.clear();
+                messageList.forEach((msg) {
+                  _messages.add(MessageWidget(
+                    message: msg,
+                  ));
+                });
+                _messages.add(
+                    MessageWidget(
+                        message: Message(
+                            from: 'asohsljdsaadsds',
+                            to: Message.ME,
+                            timestamp: 'dashdslsdlassda',
+                            message: 'Hellodsiahiadsbiuadsbadsbdasbdasbkibdwbadskjbdaksbdkasjbadskbdaskb jasbdkajsbdskj bakjbdkj!!'
+                        )
+                    )
+                );
+                _messages.add(
+                    MessageWidget(
+                        message: Message(
+                            from: Message.ME,
+                            to: 'dsahidas',
+                            timestamp: 'dashdslsdlassda',
+                            message: 'Yoooooooooo!!'
+                        )
+                    )
+                );
+                _messages.add(
+                    MessageWidget(
+                        message: Message(
+                            from: 'asohsljdsaadsds',
+                            to: Message.ME,
+                            timestamp: 'dashdslsdlassda',
+                            message: 'Yes is mee!!'
+                        )
+                    )
+                );
+                _messages.add(
+                    MessageWidget(
+                        message: Message(
+                            from: 'asohsljdsaadsds',
+                            to: Message.ME,
+                            timestamp: 'dashdslsdlassda',
+                            message: 'ANSWER MEE!!'
+                        )
+                    )
+                );
+              }
+              setState(() {
+                _user = user;
+                _messages = _messages;
+              });
+            });
       }
     });
     super.initState();
@@ -57,6 +100,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
       child: Scaffold(
         appBar: AppBar(
           title: Text(_user!=null ? _user.username : ''),
@@ -64,13 +108,16 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Column(
           children: <Widget>[
             Flexible(
-              child: ListView.builder(
-                padding: new EdgeInsets.all(8.0),
-                reverse: true,
-                itemBuilder: (_, int index) =>
-                    _messages.reversed.toList()[index],
-                itemCount: _messages.length,
-              ),
+              child: Container(
+                color: Theme.of(context).backgroundColor,
+                child: ListView.builder(
+                  padding: new EdgeInsets.all(8.0),
+                  reverse: true,
+                  itemBuilder: (_, int index) =>
+                  _messages.reversed.toList()[index],
+                  itemCount: _messages.length,
+                ),
+              )
             ),
             new Divider(
               height: 1.0,
@@ -104,14 +151,21 @@ class _ChatScreenState extends State<ChatScreen> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                       onPressed: (this._user != null)
                           ? () {
+                        Message msgToSend = Message(
+                          from: Message.ME,
+                          to: _user.uid,
+                          message: _controller.text,
+                          timestamp: DateTime.now().toIso8601String(),
+                        );
+
                         _cloudFunctions.sendMessage(_user.uid, _controller.text);
-                        _messageRepository.saveMessage(
-                            Message(
-                              from: Message.ME,
-                              to: _user.uid,
-                              message: _controller.text,
-                              timestamp: DateTime.now().toIso8601String(),
-                            ));
+                        _messageRepository.saveMessage(msgToSend)
+                            .then((msg) {
+                              setState(() {
+                                _messages.add(MessageWidget(message: msg));
+                              });
+                            });
+                          _controller.clear();
                       }
                           : null,
                         child: (this._user != null)

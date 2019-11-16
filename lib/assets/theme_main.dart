@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 final _primary = Colors.pink;
+final _accent = Colors.green;
 
 final lightTheme = ThemeData(
+  backgroundColor: Colors.black12,
   textTheme: TextTheme(
     button: TextStyle(
       fontSize: 16,
@@ -29,5 +31,5 @@ final lightTheme = ThemeData(
     splashColor: Colors.pinkAccent,
   ),
   primarySwatch: _primary,
-  accentColor: Colors.green,
+  accentColor: _accent,
 );

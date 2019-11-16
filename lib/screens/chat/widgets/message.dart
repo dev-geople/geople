@@ -13,29 +13,36 @@ class MessageWidget extends StatelessWidget{
         ? MainAxisAlignment.end
         : MainAxisAlignment.start,
       children: <Widget>[
-        Container(
-          decoration: message.from == Message.ME
-              ? BoxDecoration(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(100),
-              bottomRight: Radius.zero,
-              topLeft: Radius.circular(100),
-              topRight: Radius.circular(100),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 2),
+            child: Container(
+              constraints: BoxConstraints(maxWidth: 270),
+              child: Material(
+                  color: message.from == Message.ME
+                    ? Theme.of(context).cardColor
+                    : Colors.lightBlueAccent,
+                  elevation: 2,
+                  borderOnForeground: true,
+                  borderRadius: message.from == Message.ME
+                      ? BorderRadius.only(
+                    bottomLeft: Radius.circular(15),
+                    bottomRight: Radius.zero,
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  )
+                      : BorderRadius.only(
+                    bottomRight: Radius.circular(15),
+                    bottomLeft: Radius.zero,
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                    child: Text(message.message, style: Theme.of(context).textTheme.body1,),
+                  )
+              ),
             ),
-            color: Colors.green,
-          )
-              : BoxDecoration(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.zero,
-              bottomRight: Radius.circular(100),
-              topLeft: Radius.circular(100),
-              topRight: Radius.circular(100),
-            ),
-            color: Colors.red,
-          ),
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-          child: Text(message.message, ),
-        ),
+        )
       ]
     );
   }
