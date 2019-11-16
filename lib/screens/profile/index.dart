@@ -64,7 +64,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: Stack(
                                     children: <Widget>[
                                       Visibility(
-                                        child: Text(_friendRequestSent ? 'PENDING' : 'ADD FRIEND'),
+                                        child: Text(
+                                            _friendRequestSent ? 'PENDING' : 'ADD FRIEND'
+                                        ),
                                         maintainSize: true,
                                         maintainAnimation: true,
                                         maintainSemantics: true,

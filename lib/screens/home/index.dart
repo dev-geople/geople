@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     // Tabs initialisieren
-    final _notificationManager = PushNotificationsManager();
+    final _notificationManager = NotificationService();
     _notificationManager.init();
 
     _tabController = TabController(length: 3, vsync: this, initialIndex: 0);

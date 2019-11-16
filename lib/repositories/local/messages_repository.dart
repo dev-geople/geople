@@ -39,9 +39,14 @@ class MessageRepository {
   }
 
   Future<Message> saveMessage(Message message) async {
-    await db.insert(this.tableMessages, message.toMap());
-    print('MESSAGE SAVED: $message.$toString()');
-    return message;
+    if(db != null) {
+      await db.insert(this.tableMessages, message.toMap());
+      print('MESSAGE SAVED: $message.$toString()');
+      return message;
+    } else {
+      await initilizeDB();
+      saveMessage(message);
+    }
   }
 
   Future<List<Message>> getMessagesOfUser(String uid) async {

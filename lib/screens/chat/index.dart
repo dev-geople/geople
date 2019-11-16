@@ -27,6 +27,11 @@ class _ChatScreenState extends State<ChatScreen> {
   List<MessageWidget> _messages = List<MessageWidget>();
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   void initState() {
     UserDTO _dto = UserDTO();
     _dto.getUserDetails(widget.uid).then((snapshot) {
@@ -44,46 +49,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     message: msg,
                   ));
                 });
-                _messages.add(
-                    MessageWidget(
-                        message: Message(
-                            from: 'asohsljdsaadsds',
-                            to: Message.ME,
-                            timestamp: 'dashdslsdlassda',
-                            message: 'Hellodsiahiadsbiuadsbadsbdasbdasbkibdwbadskjbdaksbdkasjbadskbdaskb jasbdkajsbdskj bakjbdkj!!'
-                        )
-                    )
-                );
-                _messages.add(
-                    MessageWidget(
-                        message: Message(
-                            from: Message.ME,
-                            to: 'dsahidas',
-                            timestamp: 'dashdslsdlassda',
-                            message: 'Yoooooooooo!!'
-                        )
-                    )
-                );
-                _messages.add(
-                    MessageWidget(
-                        message: Message(
-                            from: 'asohsljdsaadsds',
-                            to: Message.ME,
-                            timestamp: 'dashdslsdlassda',
-                            message: 'Yes is mee!!'
-                        )
-                    )
-                );
-                _messages.add(
-                    MessageWidget(
-                        message: Message(
-                            from: 'asohsljdsaadsds',
-                            to: Message.ME,
-                            timestamp: 'dashdslsdlassda',
-                            message: 'ANSWER MEE!!'
-                        )
-                    )
-                );
               }
               setState(() {
                 _user = user;

@@ -5,13 +5,15 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geople/services/user_dto.dart';
 
-class PushNotificationsManager {
+import 'authentication.dart';
 
-  PushNotificationsManager._();
+class NotificationService {
+  NotificationService._();
 
-  factory PushNotificationsManager() => _instance;
+  factory NotificationService() => _instance;
 
-  static final PushNotificationsManager _instance = PushNotificationsManager._();
+  static final NotificationService _instance =
+      NotificationService._();
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   bool _initialized = false;
@@ -20,34 +22,48 @@ class PushNotificationsManager {
     if (!_initialized) {
       // For iOS request permission first.
       _firebaseMessaging.requestNotificationPermissions();
-      _firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) async {
-          if (Platform.isAndroid) {
-            print("onMessage Android foo: ${message.toString()}");
-          } else if (Platform.isIOS) {
-            debugPrint("onMessage iOS foo: " + message['message']);
-          }
-        },
-        /**onBackgroundMessage: (Map<String, dynamic> message) async {
-          print('on backgroundmessage $message');
-        },*/
-        onResume: (Map<String, dynamic> message) async {
-          print('on resume $message');
-        },
-        onLaunch: (Map<String, dynamic> message) async {
-          print('on launch $message');
-        },
-      );
-
-      _firebaseMessaging.getToken().then((token){
-        UserDTO _dto = UserDTO();
-        FirebaseAuth.instance.currentUser().then((user) {
-          if(user != null)
-            _dto.saveToken(user.uid, token);
-        });
+      _firebaseMessaging.onTokenRefresh.listen((newToken) {
+        UserDTO dto = new UserDTO();
+        Auth auth = new Auth();
+        auth.getCurrentUser()
+            .then((user) => dto.saveToken(user.uid, newToken))
+            .catchError((error) => print('GeopleError: ' + error.toString()));
       });
 
-      _initialized = true;
+      _firebaseMessaging.configure(
+        onMessage: _onMessage,
+        //onBackgroundMessage: _onBackgroundMessage
+        onResume: _onResume,
+        onLaunch: _onLaunch
+      );
+    }
+
+    _firebaseMessaging.getToken().then((token) {
+      UserDTO _dto = UserDTO();
+      FirebaseAuth.instance.currentUser().then((user) {
+        if (user != null) _dto.saveToken(user.uid, token);
+      });
+    });
+
+    _initialized = true;
+  }
+
+
+  Future<void> _onLaunch(Map<String, dynamic> message) {
+    print("onLaunch $message");
+    return null;
+  }
+
+  Future<void> _onResume(Map<String, dynamic> message) {
+    print("onResume $message");
+    return null;
+  }
+
+  Future<void> _onMessage(Map<String, dynamic> message) async {
+    if (Platform.isAndroid) {
+      print("onMessage Android foo: ${message.toString()}");
+    } else if (Platform.isIOS) {
+      debugPrint("onMessage iOS foo: " + message['message']);
     }
   }
 }
