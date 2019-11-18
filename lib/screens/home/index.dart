@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen>
           ],
         ),
         resizeToAvoidBottomPadding: true,
-        bottomNavigationBar:  TabBar(
+        bottomNavigationBar: TabBar(
             controller: _tabController,
             tabs: [
               Tab(icon: Icon(Icons.map) ),

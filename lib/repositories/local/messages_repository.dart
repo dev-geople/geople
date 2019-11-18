@@ -4,12 +4,13 @@ import 'package:sqflite/sqflite.dart';
 class MessageRepository {
   final fileName = 'messages.db';
 
-  final String tableMessages = 'messages';
-  final String columnId = 'message_id';
-  final String columnMessage = 'message';
-  final String columnFrom = 'message_from';
-  final String columnTo = 'message_to';
-  final String columnTimestamp = 'timestamp';
+  static const String TABLE_MESSAGES = 'messages';
+  static const String COLUMN_ID = 'message_id';
+  static const String COLUMN_MESSAGE = 'message';
+  static const String COLUMN_FROM = 'message_from';
+  static const String COLUMN_TO = 'message_to';
+  static const String COLUMN_TIMESTAMP = 'timestamp';
+  static const String COLUMN_CHAT_PARTNER = 'chat_partner';
 
   Database db;
   String path;
@@ -25,12 +26,13 @@ class MessageRepository {
       onCreate: (Database db, int version) async {
         await db.execute(
           '''
-          CREATE TABLE $tableMessages (
-            $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
-            $columnFrom TEXT NOT NULL,
-            $columnTo TEXT NOT NULL,
-            $columnMessage TEXT NOT NULL,
-            $columnTimestamp TEXT NOT NULL
+          CREATE TABLE $TABLE_MESSAGES (
+            $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            $COLUMN_FROM TEXT NOT NULL,
+            $COLUMN_TO TEXT NOT NULL,
+            $COLUMN_MESSAGE TEXT NOT NULL,
+            $COLUMN_TIMESTAMP TEXT NOT NULL,
+            $COLUMN_CHAT_PARTNER TEXT NOT NULL
           )
           '''
         );
@@ -40,26 +42,57 @@ class MessageRepository {
 
   Future<Message> saveMessage(Message message) async {
     if(db != null) {
-      await db.insert(this.tableMessages, message.toMap());
+      await db.insert(TABLE_MESSAGES, message.toMap());
       print('MESSAGE SAVED: $message.$toString()');
       return message;
     } else {
       await initilizeDB();
       saveMessage(message);
     }
+    return message;
+  }
+
+  Future<Message> saveMessageFromNotification(Map<String, dynamic> message) async {
+    Message msgToSave = Message.fromNotification(message);
+    await saveMessage(msgToSave);
+    return msgToSave;
   }
 
   Future<List<Message>> getMessagesOfUser(String uid) async {
     List<Message> messages = new List<Message>();
     if(db == null) await this.initilizeDB();
-    List<Map> maps = await db.query(this.tableMessages,
-      columns: [columnMessage, columnFrom, columnTo, columnTimestamp],
-      where: '$columnFrom = ? OR $columnTo = ?',
+    List<Map> maps = await db.query(TABLE_MESSAGES,
+      columns: [COLUMN_MESSAGE, COLUMN_FROM, COLUMN_TO, COLUMN_TIMESTAMP],
+      where: '$COLUMN_FROM = ? OR $COLUMN_TO = ?',
       whereArgs: [uid, uid],
     );
     if(maps.length > 0) {
       maps.forEach((e){
-        messages.add(Message.fromMap(e));
+          messages.add(Message.fromMap(e));
+      });
+      return messages;
+    }
+    return null;
+  }
+
+  Future<List<Message>> getChatList() async {
+    List<Message> messages = new List<Message>();
+    if(db == null) await this.initilizeDB();
+    List<Map> maps = await db.query(TABLE_MESSAGES,
+      columns: [COLUMN_FROM, COLUMN_MESSAGE, COLUMN_TIMESTAMP, COLUMN_TO],
+      orderBy: COLUMN_TIMESTAMP + ' DESC',
+      groupBy: COLUMN_CHAT_PARTNER
+    );
+    bool add = true;
+    if(maps.length > 0) {
+      maps.forEach((e){
+        add = true;
+        messages.forEach((ee){
+          if(ee.from == e[COLUMN_FROM]){
+            add = false;
+          }
+        });
+        if(add) messages.add(Message.fromMap(e));
       });
       return messages;
     }
@@ -68,9 +101,9 @@ class MessageRepository {
 
   Future<bool> printMessages(String uid) async {
     List<Message> messages = new List<Message>();
-    List<Map> maps = await db.query(this.tableMessages,
-      columns: [columnMessage, columnFrom, columnTo, columnTimestamp],
-      where: '$columnFrom = ? or $columnTo = ?',
+    List<Map> maps = await db.query(TABLE_MESSAGES,
+      columns: [COLUMN_MESSAGE, COLUMN_FROM, COLUMN_TO, COLUMN_TIMESTAMP],
+      where: '$COLUMN_FROM = ? or $COLUMN_TO = ?',
       whereArgs: [uid, uid],
     );
     if(maps.length > 0) {

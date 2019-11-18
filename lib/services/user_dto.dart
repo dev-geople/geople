@@ -27,4 +27,16 @@ class UserDTO {
     return Firestore.instance.collection(USER_COLLECTION).document(uid).get();
   }
 
+  Future<GeopleUser> getGeopleUser(String uid) async{
+    return this.getUserDetails(uid).then((snapshot) {
+      GeopleUser user = GeopleUser();
+      var data = snapshot.data;
+      if(data.containsKey('username')) user.username = data['username'];
+      //Todo: if(data.containsKey('profilePicUrl')) user.profilePicUrl = data['profilePicUrl'];
+      if(data.containsKey('token')) user.token = data['token'];
+
+      return user;
+    });
+  }
+
 }

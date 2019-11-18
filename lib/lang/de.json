@@ -6,6 +6,7 @@
   "confirm_password_label": "Passwort Bestätigen",
   "login_label": "Anmelden",
   "register_label": "Neuen Account erstellen",
+  "you": "Du",
 
   "save_button_text": "Speichern",
   "login_button_text": "Anmelden",
@@ -16,5 +17,7 @@
   "error_unmet_email_policy": "Invalide Email!",
   "error_unmet_password_policy": "Das Passwort ist nicht sicher genug!",
   "error_passwords_match": "Passwörter stimmen nicht überein!",
-  "error_unmet_username_policy": "Der Nutzername muss aus mindestens 5 Zeichen bestehen!"
+  "error_unmet_username_policy": "Der Nutzername muss aus mindestens 5 Zeichen bestehen!",
+
+  "info_no_messages": "Noch keine Nachrichten"
 }

@@ -8,6 +8,7 @@ class Message extends Model{
   String from;
   String to;
   String timestamp;
+  String chatPartner;
 
   Message({
     this.id,
@@ -15,6 +16,7 @@ class Message extends Model{
     this.from,
     this.to,
     this.timestamp,
+    this.chatPartner
   });
 
 
@@ -25,6 +27,7 @@ class Message extends Model{
     this.from = map['message_from'];
     this.to = map['message_to'];
     this.timestamp = map['timestamp'];
+    this.chatPartner = map['chat_partner'];
   }
 
   static Message fromMap(Map<String, dynamic> map){
@@ -38,9 +41,22 @@ class Message extends Model{
     return message;
   }
 
+  static Message fromNotification(Map<String, dynamic> message) {
+    var notification = message['notification'];
+    var data = message['data'];
+    return Message(
+      from: data['sender'],
+      to: Message.ME,
+      message: notification['body'],
+      timestamp: DateTime.now().toIso8601String(),
+      chatPartner: data['sender'],
+    );
+  }
+
   @override
   Map<String, dynamic> toMap() {
     var map = <String, dynamic> {
+      'chat_partner': this.chatPartner,
       'message': this.message,
       'message_from': this.from,
       'message_to': this.to,
@@ -53,6 +69,7 @@ class Message extends Model{
   toString() {
     return '''
     
+      ChatPartner: $chatPartner
       Message: $message
       From: $from
       To $to

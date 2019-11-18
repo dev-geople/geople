@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geople/model/GeopleUser.dart';
-import 'package:geople/screens/profile/widgets/profile_picture.dart';
+import 'package:geople/widgets/profile_picture.dart';
 
 class ProfileHeader extends StatelessWidget {
   ProfileHeader({this.user});

@@ -6,6 +6,7 @@
   "confirm_password_label": "Confirm Password",
   "login_label": "Login",
   "register_label": "Create Account",
+  "you": "You",
 
   "save_button_text": "Save",
   "login_button_text": "Login",
@@ -16,5 +17,7 @@
   "error_unmet_email_policy": "invalid email address!",
   "error_unmet_password_policy": "password isn't save enough!",
   "error_passwords_match": "passwords don't match!",
-  "error_unmet_username_policy": "Username must have at least 5 Characters!"
+  "error_unmet_username_policy": "Username must have at least 5 Characters!",
+
+  "info_no_messages": "No messages yet"
 }

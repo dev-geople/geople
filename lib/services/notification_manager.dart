@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:geople/repositories/local/messages_repository.dart';
 import 'package:geople/services/user_dto.dart';
 
 import 'authentication.dart';
@@ -15,6 +16,7 @@ class NotificationService {
   static final NotificationService _instance =
       NotificationService._();
 
+  final MessageRepository _repo = MessageRepository();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   bool _initialized = false;
 
@@ -32,7 +34,7 @@ class NotificationService {
 
       _firebaseMessaging.configure(
         onMessage: _onMessage,
-        //onBackgroundMessage: _onBackgroundMessage
+        //Todo: onBackgroundMessage: Einkommende Nachrichten speichern
         onResume: _onResume,
         onLaunch: _onLaunch
       );
@@ -50,19 +52,21 @@ class NotificationService {
 
 
   Future<void> _onLaunch(Map<String, dynamic> message) {
-    print("onLaunch $message");
+    //Todo: Navigate
     return null;
   }
 
   Future<void> _onResume(Map<String, dynamic> message) {
-    print("onResume $message");
+    //Todo: Navigate
     return null;
   }
 
   Future<void> _onMessage(Map<String, dynamic> message) async {
     if (Platform.isAndroid) {
-      print("onMessage Android foo: ${message.toString()}");
+      _repo.saveMessageFromNotification(message);
+      print("onMessage Android message: ${message.toString()}");
     } else if (Platform.isIOS) {
+      //Todo: OnMessage iOS
       debugPrint("onMessage iOS foo: " + message['message']);
     }
   }

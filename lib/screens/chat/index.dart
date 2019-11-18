@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geople/app_localizations.dart';
 import 'package:geople/model/GeopleUser.dart';
 import 'package:geople/model/Message.dart';
 import 'package:geople/repositories/local/messages_repository.dart';
@@ -6,7 +7,7 @@ import 'package:geople/screens/chat/widgets/message.dart';
 import 'package:geople/services/geople_cloud_functions.dart';
 import 'package:geople/services/user_dto.dart';
 
-//TODO: Beim Empfangen einer NAchricht, diese anzeigen.
+//TODO: Beim Empfangen einer Nachricht, diese anzeigen.
 
 class ChatScreen extends StatefulWidget {
   ChatScreen({this.uid});
@@ -73,16 +74,32 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Column(
           children: <Widget>[
             Flexible(
-              child: Container(
+              child: (_user != null)
+              ? Container(
                 color: Theme.of(context).backgroundColor,
-                child: ListView.builder(
-                  padding: new EdgeInsets.all(8.0),
-                  reverse: true,
-                  itemBuilder: (_, int index) =>
-                  _messages.reversed.toList()[index],
-                  itemCount: _messages.length,
-                ),
+                child: (_messages.length > 0)
+                ? ListView.builder(
+                      padding: EdgeInsets.all(8.0),
+                      reverse: true,
+                      itemBuilder: (_, int index) =>
+                      _messages.reversed.toList()[index],
+                      itemCount: _messages.length,
+                    )
+                : SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context).translate('info_no_messages'),
+                          style: Theme.of(context).textTheme.body1,
+                        ),
+                      ]
+                  ),
+                )
               )
+              : Center(child: CircularProgressIndicator()),
             ),
             new Divider(
               height: 1.0,
@@ -121,6 +138,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           to: _user.uid,
                           message: _controller.text,
                           timestamp: DateTime.now().toIso8601String(),
+                          chatPartner: _user.uid
                         );
 
                         _cloudFunctions.sendMessage(_user.uid, _controller.text);
