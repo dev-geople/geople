@@ -22,7 +22,6 @@ class _ChatsPageState extends State<ChatsPage> {
       if (list != null) {
         _chats.clear();
         list.forEach((e) {
-          print(e.toString());
           _chats.add(UserTileLastMessage(
             lastMessage: e,
           ));

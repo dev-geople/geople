@@ -8,28 +8,63 @@ import 'package:intl/intl.dart';
 import '../app_localizations.dart';
 import '../router.dart';
 
-class UserTile extends StatelessWidget {
-  UserTile({@required this.user});
+class UserTile extends StatefulWidget{
+  UserTile({@required this.uid});
 
-  final GeopleUser user;
+  final String uid;
+
+  @override
+  State<StatefulWidget> createState() => _UserTileState(uid);
+}
+
+class _UserTileState extends State<UserTile> {
+  _UserTileState(this._uid);
+
+  String _uid;
+  GeopleUser user;
+
+  @override
+  void initState() {
+    UserDTO dto = UserDTO();
+    dto.getGeopleUser(_uid)
+        .then((geopleUser) {
+      if(this.mounted) setState(() {
+        this.user = geopleUser;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {
-        Navigator.of(context).pushNamed(Routes.PROFILE, arguments: user.uid);
-      },
-      title: Text(user.username ?? ''),
-      subtitle: Text(user.status ?? ''),
-      trailing: IconButton(
-        icon: Icon(Icons.chat),
-        onPressed: () {
-          Navigator.of(context).pushNamed(Routes.CHAT, arguments: user.uid);
-        },
-      ),
-    );
+    if(user != null) {
+      return Material(
+        color: Theme.of(context).cardColor,
+        elevation: 3,
+
+        child: ListTile(
+          onTap: () {
+            if (user != null)
+              Navigator.of(context).pushNamed(Routes.PROFILE, arguments: _uid);
+          },
+          leading: ProfilePictureSmall(imageUrl: 'https://lakewangaryschool.sa.edu.au/wp-content/uploads/2017/11/placeholder-profile-sq.jpg'),
+          title: Text(user.username??''),
+          subtitle: Row(
+            children: <Widget>[
+              Text(user.status??'')
+            ],
+          ),
+          trailing: IconButton(
+              icon: Icon(Icons.close),
+              onPressed: (){
+                print('delete friend'); //Todo: remove friend
+              }
+            ),
+        ),
+      );
+    } return Text('');
   }
 }
+
 
 class UserTileLastMessage extends StatefulWidget{
   UserTileLastMessage({@required this.lastMessage});

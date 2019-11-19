@@ -21,7 +21,7 @@ class _DebugScreenState extends State<DebugScreen> {
                 children: snapshot.data.documents.map((document) {
                   GeopleUser user = GeopleUser();
                   user.toObject(document.data, uid: document.documentID);
-                  return UserTile(user: user);
+                  return UserTile(uid: user.uid);
                 }).toList(),
               );
             },
