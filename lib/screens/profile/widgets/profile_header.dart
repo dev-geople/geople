@@ -32,7 +32,7 @@ class ProfileHeader extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(user.username ?? '',
-                        style: Theme.of(context).textTheme.title),
+                      style: Theme.of(context).textTheme.title),
                   ],
                 ),
               ),
