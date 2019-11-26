@@ -37,6 +37,7 @@ class Message extends Model{
       from:  map['message_from'],
       to: map['message_to'],
       timestamp: map['timestamp'],
+      chatPartner: map['chat_partner']
     );
     return message;
   }

@@ -34,7 +34,7 @@ class UserDTO {
       if(data.containsKey('username')) user.username = data['username'];
       //Todo: if(data.containsKey('profilePicUrl')) user.profilePicUrl = data['profilePicUrl'];
       if(data.containsKey('token')) user.token = data['token'];
-
+      user.uid = snapshot.documentID;
       return user;
     });
   }

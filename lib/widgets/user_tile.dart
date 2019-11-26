@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geople/model/GeopleUser.dart';
 import 'package:geople/model/Message.dart';
+import 'package:geople/repositories/local/messages_repository.dart';
 import 'package:geople/services/user_dto.dart';
 import 'package:geople/widgets/profile_picture.dart';
 import 'package:intl/intl.dart';
@@ -42,6 +43,7 @@ class UserTileLastMessage extends StatefulWidget{
 
 class _UserTileLastMessageState extends State<UserTileLastMessage> {
   _UserTileLastMessageState(this._lastMessage);
+  final MessageRepository _msgRepository = new MessageRepository();
 
   Message _lastMessage;
   GeopleUser user;
@@ -80,10 +82,10 @@ class _UserTileLastMessageState extends State<UserTileLastMessage> {
             ],
           ),
           trailing: IconButton(
-              icon: Icon(Icons.person),
+              icon: Icon(Icons.clear),
               onPressed: (){
                 if (user != null)
-                  Navigator.of(context).pushNamed(Routes.PROFILE, arguments: _lastMessage.from != Message.ME ? _lastMessage.from : _lastMessage.to);
+                  _msgRepository.deleteChat(user.uid);
               }),
         ),
       );

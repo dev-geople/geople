@@ -62,7 +62,7 @@ class MessageRepository {
     List<Message> messages = new List<Message>();
     if(db == null) await this.initilizeDB();
     List<Map> maps = await db.query(TABLE_MESSAGES,
-      columns: [COLUMN_MESSAGE, COLUMN_FROM, COLUMN_TO, COLUMN_TIMESTAMP],
+      columns: [COLUMN_CHAT_PARTNER, COLUMN_MESSAGE, COLUMN_FROM, COLUMN_TO, COLUMN_TIMESTAMP],
       where: '$COLUMN_FROM = ? OR $COLUMN_TO = ?',
       whereArgs: [uid, uid],
     );
@@ -79,7 +79,7 @@ class MessageRepository {
     List<Message> messages = new List<Message>();
     if(db == null) await this.initilizeDB();
     List<Map> maps = await db.query(TABLE_MESSAGES,
-      columns: [COLUMN_FROM, COLUMN_MESSAGE, COLUMN_TIMESTAMP, COLUMN_TO],
+      columns: [COLUMN_CHAT_PARTNER, COLUMN_FROM, COLUMN_MESSAGE, COLUMN_TIMESTAMP, COLUMN_TO],
       orderBy: COLUMN_TIMESTAMP + ' DESC',
       groupBy: COLUMN_CHAT_PARTNER
     );
@@ -99,10 +99,14 @@ class MessageRepository {
     return null;
   }
 
+  Future<int> deleteChat(String chatPartner) async {
+    return await db.delete(TABLE_MESSAGES, where: '$COLUMN_CHAT_PARTNER= ?', whereArgs: [chatPartner]);
+  }
+
   Future<bool> printMessages(String uid) async {
     List<Message> messages = new List<Message>();
     List<Map> maps = await db.query(TABLE_MESSAGES,
-      columns: [COLUMN_MESSAGE, COLUMN_FROM, COLUMN_TO, COLUMN_TIMESTAMP],
+      columns: [COLUMN_CHAT_PARTNER, COLUMN_MESSAGE, COLUMN_FROM, COLUMN_TO, COLUMN_TIMESTAMP],
       where: '$COLUMN_FROM = ? or $COLUMN_TO = ?',
       whereArgs: [uid, uid],
     );

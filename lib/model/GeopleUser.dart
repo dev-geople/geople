@@ -19,7 +19,7 @@ class GeopleUser extends Model {
     this.status = map['status'];
     this.geohash = map['geohash'];
     this.location = Location(latitude: map['latitude'], longitude: map['longitude']);
-    this.locationTime = map['location_timestamp'];
+    //this.locationTime = map['location_timestamp'];
   }
 
   @override
