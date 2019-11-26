@@ -1,12 +1,8 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
-  static final INITIAL_ZOOM = 11.0;
-  static final INITIAL_POSITION = LatLng(46.948, 7.44744); //Bern
-
   @override
   State<StatefulWidget> createState() {
     return _SettingsScreenState();
@@ -14,7 +10,21 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  double _sliderValue = 10.0;
+  double _sliderValue = 500;
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((pref) {
+      int value = pref.getInt("Radius");
+      if (value != null) {
+        setState(() {
+          _sliderValue = value.toDouble();
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -26,20 +36,47 @@ class _SettingsScreenState extends State<SettingsScreen> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text('Radius', textAlign: TextAlign.left),
-          Slider(
-          activeColor: Colors.indigoAccent,
-            min: 0.0,
-            max: 50000000.0,
-            onChanged: (newRating) {
-              setState(() => _sliderValue = newRating);
-            },
-            value: _sliderValue,
-          ),
-              Text('${_sliderValue.toInt()} m')
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: Card(
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Radius',
+                              textAlign: TextAlign.left,
+                              style: Theme.of(context).textTheme.title,
+                            ),
+                            Text(
+                              '${_sliderValue.toInt()} m',
+                              textAlign: TextAlign.right,
+                              style: Theme.of(context).textTheme.title,
+                            )
+                          ],
+                        ),
+                      ),
+                      Slider(
+                        activeColor: Colors.indigoAccent,
+                        min: 0.0,
+                        max: 50000000.0,
+                        onChanged: (newRadius) async {
+                          setState(() => _sliderValue = newRadius);
+                          final prefs = await SharedPreferences.getInstance();
+                          prefs.setInt("Radius", newRadius.toInt());
+                        },
+                        value: _sliderValue,
+                      ),
+                    ],
+                  ),
+                ),
+              )
             ],
-          )
-      ),
+          )),
     );
   }
 }
