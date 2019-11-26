@@ -37,7 +37,7 @@ class _MapPageState extends State<MapPage> {
         _loading = false;
       });
       _geolocator.getPositionStream().listen((position) {
-        print(position.toString());
+        // print(position.toString());
       });
 
       if(_locationServiceEnabled){

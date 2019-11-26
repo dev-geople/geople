@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geople/services/authentication.dart';
 import 'package:geople/services/notification_manager.dart';
-import 'package:toast/toast.dart';
 
 import 'package:geople/screens/home/widgets/floating_action_button_builder.dart';
 import 'package:geople/screens/home/pages/exports.dart';
