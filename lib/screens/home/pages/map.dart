@@ -5,6 +5,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPage extends StatefulWidget {
+  static final INITIAL_ZOOM = 11.0;
+  static final INITIAL_POSITION = LatLng(46.948, 7.44744); //Bern
+
   @override
   State<StatefulWidget> createState() {
     return _MapPageState();
@@ -12,35 +15,68 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  GoogleMapController mapController;
-  LatLng _initialPosition = LatLng(40,20);
-
+  Completer<GoogleMapController> _controller = Completer();
+  Geolocator _geolocator = Geolocator();
+  Stream<Position> _positionStream;
+  bool _locationServiceEnabled = false;
+  bool _loading = true;
+  Set<Marker> _markers = Set.of([
+    Marker(markerId: MarkerId('testMarker')),
+  ]);
   void _onMapCreated(GoogleMapController controller) {
-    this.mapController = controller;
+    _controller.complete(controller);
   }
 
   @override
   void initState() {
+    _loading = true;
     super.initState();
-    _getUserLocation();
-  }
-  void _getUserLocation() async {
-    var currentLocation = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    _geolocator.isLocationServiceEnabled().then((enabled) {
+      setState(() {
+        _locationServiceEnabled = enabled;
+        _loading = false;
+      });
+      _geolocator.getPositionStream().listen((position) {
+        print(position.toString());
+      });
 
-    setState(() {
-      _initialPosition = LatLng(currentLocation.latitude, currentLocation.longitude);
+      if(_locationServiceEnabled){
+        _getUserLocation().then((position){
+          _animateCameraToPosition(LatLng(position.latitude, position.longitude));
+        });
+      }
     });
+  }
+
+  Future<Position> _getUserLocation() async {
+    return _geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
   }
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      onMapCreated: _onMapCreated,
-      initialCameraPosition: CameraPosition(
-        target: _initialPosition,
-        zoom: 11.0,
-      ),
-    );
+    return (_loading)
+    ? Center(child: CircularProgressIndicator(),)
+    : (!_locationServiceEnabled)
+      ? Text('Not enabled')
+      : GoogleMap(
+        markers: _markers,
+        myLocationEnabled: true,
+        rotateGesturesEnabled: true,
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(
+          target: MapPage.INITIAL_POSITION,
+          zoom: MapPage.INITIAL_ZOOM,
+        ),
+      );
+  }
+
+  void _animateCameraToPosition(LatLng position) async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        zoom: MapPage.INITIAL_ZOOM,
+        target: position
+      )
+    ));
   }
 }
