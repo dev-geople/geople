@@ -50,10 +50,10 @@ class GeopleCloudFunctions {
     }
   }
 
-  getUserListInProximity(Location location, double radius) async {
+  Future<HttpsCallableResult> getUserListInProximity(Location location, double radius) async {
     try {
       HttpsCallable callable = 
-          cf.getHttpsCallable(functionName: 'getUserListInProximityHttp');
+          cf.getHttpsCallable(functionName: 'getUserListInProximity');
       return await callable.call(<String, dynamic>
       {
         'lat': location.latitude,
