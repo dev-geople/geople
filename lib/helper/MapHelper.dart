@@ -36,7 +36,7 @@ class MapHelper {
   }
 
   static Future<bool> checkWithinMeters(Position pos1, Position pos2, int distance, Geolocator geolocator) async {
-    geolocator.distanceBetween(
+    await geolocator.distanceBetween(
         pos1.latitude, pos1.longitude,
         pos2.latitude, pos2.longitude
     ).then((val) {

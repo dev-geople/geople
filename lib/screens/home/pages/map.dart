@@ -8,7 +8,7 @@ import 'package:geople/services/geople_cloud_functions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPage extends StatefulWidget {
-  static final INITIAL_ZOOM = 11.0;
+  static final INITIAL_ZOOM = 15.0;
   static final INITIAL_POSITION = LatLng(46.948, 7.44744); //Bern
   static final UPDATE_TIMER = 10; //In seconds
 
