@@ -6,22 +6,24 @@ import 'package:geople/services/user_dto.dart';
 class FriendsRepository {
   static const FRIENDLIST_COLLECTION = 'friendslists';
 
-  Future<List<String>> getFriends() async{
-    List<String> references = new List();
+  Future<Map<String, bool>> getFriends() async{
+    Map<String, bool> uids = new Map();
     Auth auth = new Auth();
     return auth.getCurrentUser().then((user){
-        return Firestore.instance.collection(FRIENDLIST_COLLECTION).document(user.uid).collection('friends').getDocuments()
-          .then((snapshot) async{
-            if(snapshot != null) {
-              snapshot.documents.forEach((document) async{
-                DocumentReference ref = document.data['reference'];
-                bool pending = document.data['pending'];
-                references.add(ref.documentID);
-              });
-              return references;
-            }
-            return null;
-      });
+        return Firestore.instance.collection(FRIENDLIST_COLLECTION)
+            .document(user.uid).collection('friends')
+            .orderBy('pending').getDocuments()
+              .then((snapshot) async{
+                if(snapshot != null) {
+                  snapshot.documents.forEach((document) async{
+                    DocumentReference ref = document.data['reference'];
+                    bool pending = document.data['pending'];
+                    uids[ref.documentID]=  pending;
+                  });
+                  return uids;
+                }
+                return null;
+            });
     });
   }
 }

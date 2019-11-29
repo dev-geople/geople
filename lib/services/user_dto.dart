@@ -32,8 +32,9 @@ class UserDTO {
       GeopleUser user = GeopleUser();
       var data = snapshot.data;
       if(data.containsKey('username')) user.username = data['username'];
-      //Todo: if(data.containsKey('profilePicUrl')) user.profilePicUrl = data['profilePicUrl'];
+      if(data.containsKey('profilePicUrl')) user.profilePicUrl = data['profilePicUrl'];
       if(data.containsKey('token')) user.token = data['token'];
+      if(data.containsKey('status')) user.status = data['status'];
 
       return user;
     });

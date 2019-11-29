@@ -12,13 +12,13 @@ class FriendsPage extends StatefulWidget {
 
 class _FriendsPageState extends State<FriendsPage> {
   bool _noFriends = false;
-  List<UserTile> _friends = List<UserTile>();
+  List<FriendTile> _friends = List<FriendTile>();
   @override
   void initState() {
     FriendsRepository repo = FriendsRepository();
-    repo.getFriends().then((list) {
-      list.forEach((uid) {
-        _friends.add(UserTile(uid: uid));
+    repo.getFriends().then((map) {
+      map.forEach((uid, pending) {
+        _friends.add(FriendTile(uid: uid, pending: pending,));
       });
       setState(() {});
     });
