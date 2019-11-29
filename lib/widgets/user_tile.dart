@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:geople/model/GeopleUser.dart';
 import 'package:geople/model/Message.dart';
+import 'package:geople/repositories/local/messages_repository.dart';
+import 'package:geople/screens/chat/arguments.dart';
 import 'package:geople/services/user_dto.dart';
 import 'package:geople/widgets/profile_picture.dart';
 import 'package:intl/intl.dart';
@@ -67,17 +69,18 @@ class _UserTileState extends State<UserTile> {
 
 
 class UserTileLastMessage extends StatefulWidget{
-  UserTileLastMessage({@required this.lastMessage});
-
+  UserTileLastMessage({@required this.lastMessage, @required this.onDeletePressed});
   final Message lastMessage;
+  final Function onDeletePressed;
 
   @override
-  State<StatefulWidget> createState() => _UserTileLastMessageState(lastMessage);
+  State<StatefulWidget> createState() => _UserTileLastMessageState(lastMessage, onDeletePressed);
 }
 
 class _UserTileLastMessageState extends State<UserTileLastMessage> {
-  _UserTileLastMessageState(this._lastMessage);
+  _UserTileLastMessageState(this._lastMessage, this._onDeletePressed);
 
+  Function _onDeletePressed;
   Message _lastMessage;
   GeopleUser user;
 
@@ -103,7 +106,7 @@ class _UserTileLastMessageState extends State<UserTileLastMessage> {
         child: ListTile(
           onTap: () {
             if (user != null)
-              Navigator.of(context).pushNamed(Routes.CHAT, arguments: _lastMessage.from != Message.ME ? _lastMessage.from : _lastMessage.to);
+              Navigator.of(context).pushNamed(Routes.CHAT, arguments: ChatScreenArguments(uid: _lastMessage.chatPartner, deleteChat: false));
           },
           leading: ProfilePictureSmall(imageUrl: 'https://lakewangaryschool.sa.edu.au/wp-content/uploads/2017/11/placeholder-profile-sq.jpg'),
           title: Text(user.username??''),
@@ -115,11 +118,9 @@ class _UserTileLastMessageState extends State<UserTileLastMessage> {
             ],
           ),
           trailing: IconButton(
-              icon: Icon(Icons.person),
-              onPressed: (){
-                if (user != null)
-                  Navigator.of(context).pushNamed(Routes.PROFILE, arguments: _lastMessage.from != Message.ME ? _lastMessage.from : _lastMessage.to);
-              }),
+              icon: Icon(Icons.close),
+              onPressed: _onDeletePressed,
+          ),
         ),
       );
     } return Text('');

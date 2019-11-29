@@ -1,5 +1,6 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:geople/model/Location.dart';
 
 class GeopleCloudFunctions {
   static const FUNCTIONS_REGION = 'europe-west2';
@@ -44,6 +45,26 @@ class GeopleCloudFunctions {
         print(e.code);
         print(e.message);
         print(e.details);
+    } catch (e) {
+      print('GENERIC EXCEPTION');
+    }
+  }
+
+  Future<HttpsCallableResult> getUserListInProximity(Location location, double radius) async {
+    try {
+      HttpsCallable callable = 
+          cf.getHttpsCallable(functionName: 'getUserListInProximity');
+      return await callable.call(<String, dynamic>
+      {
+        'lat': location.latitude,
+        'lng': location.longitude,
+        'radius': radius,
+      });
+    } on CloudFunctionsException catch (e) {
+      print('CLOUD FUNCTIONS EXCEPTION');
+      print(e.code);
+      print(e.message);
+      print(e.details);
     } catch (e) {
       print('GENERIC EXCEPTION');
     }

@@ -25,6 +25,12 @@ dependencies:
 
   firebase_messaging: ^5.1.6
 
+  geolocator: ^5.1.4+2
+
+  shared_preferences: ^0.4.3
+
+  google_maps_flutter: ^0.5.0
+
   firebase_auth: ^0.14.0+5
 
   cloud_firestore: ^0.12.9+5
@@ -40,6 +46,8 @@ dependencies:
   sqflite: ^1.1.7+2
 
   rxdart: ^0.22.6
+
+  after_layout: ^1.0.7+2
 
   intl: ^0.15.7
 

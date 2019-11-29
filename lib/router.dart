@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:geople/screens/chat/arguments.dart';
 import 'package:geople/screens/chat/index.dart';
 import 'package:geople/screens/debug/index.dart';
 import 'package:geople/screens/home/index.dart';
 import 'package:geople/screens/profile/index.dart';
+import 'package:geople/screens/settings/index.dart';
 import 'package:geople/screens/sign_in/index.dart';
 import 'package:geople/screens/sign_up/index.dart';
 
@@ -25,13 +27,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case Routes.SIGN_UP:
       return MaterialPageRoute(builder: (context) => RegisterScreen());
     case Routes.DEBUG:
-      return MaterialPageRoute(builder: (contex) => DebugScreen());
+      return MaterialPageRoute(builder: (context) => DebugScreen());
     case Routes.CHAT:
-      var uid = settings.arguments;
-      return MaterialPageRoute(builder: (context) => ChatScreen(uid: uid));
+      ChatScreenArguments arguments = settings.arguments;
+      return MaterialPageRoute(builder: (context) => ChatScreen(arguments: arguments));
     case Routes.PROFILE:
       var uid = settings.arguments;
       return MaterialPageRoute(builder: (context) => ProfileScreen(uid: uid));
+    case Routes.SETTINGS:
+      return MaterialPageRoute(builder: (context) => SettingsScreen());
     default:
      // return MaterialPageRoute(builder: (context) => HomeScreen());
       return null;

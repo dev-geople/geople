@@ -3,16 +3,19 @@ import 'package:geople/app_localizations.dart';
 import 'package:geople/model/GeopleUser.dart';
 import 'package:geople/model/Message.dart';
 import 'package:geople/repositories/local/messages_repository.dart';
+import 'package:geople/router.dart';
+import 'package:geople/screens/chat/arguments.dart';
 import 'package:geople/screens/chat/widgets/message.dart';
 import 'package:geople/services/geople_cloud_functions.dart';
 import 'package:geople/services/user_dto.dart';
+import 'package:after_layout/after_layout.dart';
 
 //TODO: Beim Empfangen einer Nachricht, diese anzeigen.
 
 class ChatScreen extends StatefulWidget {
-  ChatScreen({this.uid});
+  ChatScreen({this.arguments});
 
-  final String uid;
+  final ChatScreenArguments arguments;
 
   @override
   State<StatefulWidget> createState() {
@@ -20,7 +23,7 @@ class ChatScreen extends StatefulWidget {
   }
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<ChatScreen> with AfterLayoutMixin<ChatScreen>{
   GeopleUser _user;
   GeopleCloudFunctions _cloudFunctions = GeopleCloudFunctions();
   MessageRepository _messageRepository = MessageRepository();
@@ -35,11 +38,11 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     UserDTO _dto = UserDTO();
-    _dto.getUserDetails(widget.uid).then((snapshot) {
+    _dto.getUserDetails(widget.arguments.uid).then((snapshot) {
       if (snapshot.data != null) {
         GeopleUser user = GeopleUser();
         user.toObject(snapshot.data);
-        user.uid = widget.uid;
+        user.uid = widget.arguments.uid;
         //Todo: onerror
         _messageRepository.getMessagesOfUser(user.uid)
             .then((messageList) {
@@ -60,6 +63,12 @@ class _ChatScreenState extends State<ChatScreen> {
     });
     super.initState();
   }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    _showDeleteDialog();
+  }
+
 
   TextEditingController _controller = TextEditingController();
 
@@ -182,4 +191,39 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
+
+  void _deleteMessagesAndRedirect(BuildContext context) {
+    MessageRepository repo = MessageRepository();
+    repo.deleteMessagesOfUser(widget.arguments.uid).then((_) {
+      Navigator.of(context).popAndPushNamed(Routes.HOME); //Todo: Redirect to Chatlist
+    });
+  }
+
+  _showDeleteDialog(){
+    if (widget.arguments.deleteChat) {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text('Löschen'), //Todo: übersetzen
+          content: Text('wirklich löschen?'),
+          actions: <Widget>[
+            FlatButton(
+                child: Text('No'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }
+            ),
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                _deleteMessagesAndRedirect(this.context);
+              },
+            )
+          ],
+        ),
+      );
+    }
+  }
+
 }
