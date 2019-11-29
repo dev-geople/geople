@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:geople/services/authentication.dart';
 
@@ -11,6 +13,8 @@ class MeatballMenuMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<Choice>(
+      icon: Icon((Platform.isIOS) ? Icons.more_horiz : Icons.more_vert,
+        color: Theme.of(context).primaryColor,),
       /// Wenn auf eines der Menuitems getappt wird, wird diese Methode
       /// aufgerufen und als wert die Choice mitgegeben.
       onSelected: _onSelectMenu,

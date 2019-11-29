@@ -34,7 +34,9 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void initState() {
-    _loading = true; /// ProgressIndicator anzeigen.
+    _loading = true;
+
+    /// ProgressIndicator anzeigen.
     super.initState();
   }
 
@@ -42,10 +44,8 @@ class _MapPageState extends State<MapPage> {
   void didChangeDependencies() {
     /// Marker aktualisieren und einen Timer erstellen um Marker zu aktualisieren.
     _updateMarkers();
-    _updateTimer = Timer.periodic(Duration(
-        seconds: MapPage.UPDATE_TIMER),
-            (Timer timer) => _updateMarkers()
-    );
+    _updateTimer = Timer.periodic(Duration(seconds: MapPage.UPDATE_TIMER),
+        (Timer timer) => _updateMarkers());
 
     /// Check ob LocationService an und erlaubt ist.
     _geolocator.isLocationServiceEnabled().then((enabled) {
@@ -74,22 +74,18 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        (_loading)
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : (!_locationServiceEnabled)
-                ? Text('Not enabled') //Todo: übersetzen
-                : GoogleMap(
-                    markers: _markers,
-                    myLocationEnabled: true,
-                    rotateGesturesEnabled: true,
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: MapPage.INITIAL_POSITION,
-                      zoom: MapPage.INITIAL_ZOOM,
-                    ),
-                  ),
+        (!_locationServiceEnabled)
+            ? Text('Not enabled') //Todo: übersetzen
+            : GoogleMap(
+                markers: _markers,
+                myLocationEnabled: true,
+                rotateGesturesEnabled: true,
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: MapPage.INITIAL_POSITION,
+                  zoom: MapPage.INITIAL_ZOOM,
+                ),
+              ),
       ],
     );
   }
@@ -111,12 +107,12 @@ class _MapPageState extends State<MapPage> {
 
   void _updateMarkers() {
     GeopleCloudFunctions cf = GeopleCloudFunctions();
-    _getUserLocation().then((position){
-      cf.getUserListInProximity(
-          Location(
-              latitude: position.latitude,
-              longitude: position.longitude),
-          _radius)
+    _getUserLocation().then((position) {
+      cf
+          .getUserListInProximity(
+              Location(
+                  latitude: position.latitude, longitude: position.longitude),
+              _radius)
           .then((result) {
         setState(() {
           _markers = MapHelper.createMarkersFromHttpsResult(result, context);
