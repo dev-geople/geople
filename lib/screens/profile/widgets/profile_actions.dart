@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geople/model/GeopleUser.dart';
+import 'package:geople/screens/chat/arguments.dart';
 import 'package:geople/services/authentication.dart';
 import 'package:geople/services/geople_cloud_functions.dart';
 
@@ -108,7 +109,10 @@ class _ProfileActionsState extends State<ProfileActions> {
             child: RaisedButton(
               child: Text("START CHAT"),
               onPressed: () {
-                Navigator.of(context).pushNamed(Routes.CHAT, arguments: widget.user.uid);
+                Navigator.of(context).pushNamed(
+                    Routes.CHAT,
+                    arguments: ChatScreenArguments(uid: widget.user.uid, deleteChat: false)
+                );
               },
             ),
           ),

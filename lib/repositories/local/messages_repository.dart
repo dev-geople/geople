@@ -88,7 +88,7 @@ class MessageRepository {
       maps.forEach((e){
         add = true;
         messages.forEach((ee){
-          if(ee.from == e[COLUMN_FROM]){
+          if(ee.chatPartner == e[COLUMN_CHAT_PARTNER]){
             add = false;
           }
         });
@@ -97,6 +97,15 @@ class MessageRepository {
       return messages;
     }
     return null;
+  }
+
+  Future<int> deleteMessagesOfUser(String uid) async {
+    if(db == null) await this.initilizeDB();
+
+    return await db.delete(TABLE_MESSAGES,
+      where: '$COLUMN_CHAT_PARTNER = ?',
+      whereArgs: [uid],
+    );
   }
 
   Future<bool> printMessages(String uid) async {
