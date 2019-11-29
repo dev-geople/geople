@@ -32,6 +32,7 @@ class Message extends Model{
 
   static Message fromMap(Map<String, dynamic> map){
     Message message = Message(
+      chatPartner: map['chat_partner'],
       id: map['id'],
       message:  map['message'],
       from:  map['message_from'],

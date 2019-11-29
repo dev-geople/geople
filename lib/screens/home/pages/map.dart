@@ -32,19 +32,19 @@ class _MapPageState extends State<MapPage> {
     Marker(markerId: MarkerId('testMarker')),
   ]);
 
-  void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
-  }
-
   @override
   void initState() {
     _loading = true; /// ProgressIndicator anzeigen.
+    super.initState();
+  }
 
+  @override
+  void didChangeDependencies() {
     /// Marker aktualisieren und einen Timer erstellen um Marker zu aktualisieren.
     _updateMarkers();
     _updateTimer = Timer.periodic(Duration(
         seconds: MapPage.UPDATE_TIMER),
-        (Timer timer) => _updateMarkers()
+            (Timer timer) => _updateMarkers()
     );
 
     /// Check ob LocationService an und erlaubt ist.
@@ -54,7 +54,6 @@ class _MapPageState extends State<MapPage> {
         _loading = false;
       });
 
-
       if (_locationServiceEnabled) {
         _getUserLocation().then((position) {
           _animateCameraToPosition(
@@ -62,35 +61,13 @@ class _MapPageState extends State<MapPage> {
         });
       }
     });
-    super.initState();
+    super.didChangeDependencies();
   }
 
   @override
   dispose() {
     _updateTimer.cancel();
     super.dispose();
-  }
-
-  Future<Position> _getUserLocation() async {
-    return _geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best);
-  }
-
-  void _updateMarkers() {
-    print('update');
-    GeopleCloudFunctions cf = GeopleCloudFunctions();
-    _getUserLocation().then((position){
-      cf.getUserListInProximity(
-          Location(
-              latitude: position.latitude,
-              longitude: position.longitude),
-          _radius)
-          .then((result) {
-        setState(() {
-          _markers = MapHelper.createMarkersFromHttpsResult(result, context);
-        });
-      });
-    });
   }
 
   @override
@@ -102,7 +79,7 @@ class _MapPageState extends State<MapPage> {
                 child: CircularProgressIndicator(),
               )
             : (!_locationServiceEnabled)
-                ? Text('Not enabled')
+                ? Text('Not enabled') //Todo: übersetzen
                 : GoogleMap(
                     markers: _markers,
                     myLocationEnabled: true,
@@ -121,5 +98,30 @@ class _MapPageState extends State<MapPage> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(zoom: MapPage.INITIAL_ZOOM, target: position)));
+  }
+
+  Future<Position> _getUserLocation() async {
+    return _geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
+  }
+
+  void _updateMarkers() {
+    GeopleCloudFunctions cf = GeopleCloudFunctions();
+    _getUserLocation().then((position){
+      cf.getUserListInProximity(
+          Location(
+              latitude: position.latitude,
+              longitude: position.longitude),
+          _radius)
+          .then((result) {
+        setState(() {
+          _markers = MapHelper.createMarkersFromHttpsResult(result, context);
+        });
+      });
+    });
   }
 }

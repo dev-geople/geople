@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:geople/services/authentication.dart';
 import 'package:geople/services/notification_manager.dart';
 
@@ -70,12 +70,30 @@ class _HomeScreenState extends State<HomeScreen>
               Tab(icon: Icon(Icons.map) ),
               Tab(icon: Icon(Icons.chat)),
               Tab(icon: Icon(Icons.people)),
-            ]),
-        floatingActionButton: buildFABForTab(
+            ]
+        ),
+//        bottomNavigationBar: BottomAppBar(
+//          child: Row(
+//            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//            children: <Widget>[
+//              Row(
+//                children: <Widget>[
+//                  IconButton(icon: Icon(Icons.map)),
+//                  IconButton(icon: Icon(Icons.chat)),
+//                  IconButton(icon: Icon(Icons.people)),
+//                ],
+//              ),
+//              MeatballMenuMain(context: context,),
+//            ],
+//          ),
+//        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(onPressed: () => print("yes"),child: Icon(Icons.place),)
+        /*buildFABForTab(
             _tabController.index,
             context,
             _broadcastMessage
-        ),
+        ),*/
       ),
     );
   }
