@@ -1,7 +1,7 @@
 import 'package:geople/model/GeopleUser.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geople/services/authentication.dart';
-import 'package:geople/services/user_dto.dart';
+import 'package:geople/repositories/firebase/user_repository.dart';
 
 class FriendsRepository {
   static const FRIENDLIST_COLLECTION = 'friendslists';

@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geople/repositories/local/messages_repository.dart';
-import 'package:geople/services/user_dto.dart';
+import 'package:geople/repositories/firebase/user_repository.dart';
 
 import 'authentication.dart';
 

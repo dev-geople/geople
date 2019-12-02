@@ -43,7 +43,11 @@ class _ProfileActionsState extends State<ProfileActions> {
 
   /// Eigenes Profil.
   Widget buildSelfActions() {
-    return Text('IS ME');
+    return Column(
+      children: <Widget>[
+        //Todo:
+      ],
+    );
   }
 
   /// Profil einer anderen Person.

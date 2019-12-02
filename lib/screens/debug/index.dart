@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geople/model/GeopleUser.dart';
-import 'package:geople/services/user_dto.dart';
+import 'package:geople/repositories/firebase/user_repository.dart';
 import 'package:geople/widgets/user_tile.dart';
 
 class DebugScreen extends StatefulWidget {

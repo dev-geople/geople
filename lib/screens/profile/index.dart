@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geople/model/GeopleUser.dart';
 import 'package:geople/screens/profile/widgets/profile_actions.dart';
 import 'package:geople/screens/profile/widgets/profile_header.dart';
-import 'package:geople/services/user_dto.dart';
+import 'package:geople/repositories/firebase/user_repository.dart';
 
 
 class ProfileScreen extends StatefulWidget {

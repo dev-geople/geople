@@ -13,11 +13,13 @@ class GeopleBottomAppBar extends StatefulWidget {
     this.onTabSelected,
     this.iconSize: 24.0,
     this.selectedTabColor,
-  });
+    Key key
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => GeopleBottomAppBarState();
 }
+
 
 class GeopleBottomAppBarState extends State<GeopleBottomAppBar> {
   int _selectedIndex = 0;

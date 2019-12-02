@@ -4,7 +4,7 @@ import 'package:geople/app_localizations.dart';
 import 'package:geople/router.dart';
 import 'package:geople/services/authentication.dart';
 import 'package:geople/services/notification_manager.dart';
-import 'package:geople/services/user_dto.dart';
+import 'package:geople/repositories/firebase/user_repository.dart';
 import 'package:geople/widgets/form_text_field.dart';
 import 'package:geople/widgets/rounded_buttons.dart';
 
@@ -33,6 +33,7 @@ class LoginFormState extends State<LoginForm> {
             label: AppLocalizations.of(context).translate('email_label'),
             controller: _formControllers['email'],
             isMandatory: true,
+            keyboardType: TextInputType.emailAddress,
             icon: Icon(Icons.email),
           ),
           FormTextfield(
@@ -74,7 +75,7 @@ class LoginFormState extends State<LoginForm> {
                         UserDTO _dto = UserDTO();
                         FirebaseMessaging _messager = FirebaseMessaging();
                         _dto.saveToken(uid, await _messager.getToken());
-                        Navigator.of(context).pushReplacementNamed(Routes.HOME);
+                        Navigator.of(context).popAndPushNamed(Routes.HOME);
                       }
                     }).catchError((e) =>
                         print(e.toString())); // Todo: Fehlermeldungen

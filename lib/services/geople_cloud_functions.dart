@@ -50,10 +50,50 @@ class GeopleCloudFunctions {
     }
   }
 
+  sendGeoMessage(Location location, String message) async {
+    try {
+      HttpsCallable callable =
+      cf.getHttpsCallable(functionName: 'sendGeoMessage');
+      return await callable.call(<String, dynamic>
+      {
+        'message': message,
+        'lat': location.latitude,
+        'lng': location.longitude,
+      });
+    } on CloudFunctionsException catch (e) {
+      print('CLOUD FUNCTIONS EXCEPTION');
+      print(e.code);
+      print(e.message);
+      print(e.details);
+    } catch (e) {
+      print('GENERIC EXCEPTION');
+    }
+  }
+
   Future<HttpsCallableResult> getUserListInProximity(Location location, double radius) async {
     try {
       HttpsCallable callable = 
           cf.getHttpsCallable(functionName: 'getUserListInProximity');
+      return await callable.call(<String, dynamic>
+      {
+        'lat': location.latitude,
+        'lng': location.longitude,
+        'radius': radius,
+      });
+    } on CloudFunctionsException catch (e) {
+      print('CLOUD FUNCTIONS EXCEPTION');
+      print(e.code);
+      print(e.message);
+      print(e.details);
+    } catch (e) {
+      print('GENERIC EXCEPTION');
+    }
+  }
+
+  Future<HttpsCallableResult> getGeoMessagesInProximity(Location location, double radius) async {
+    try {
+      HttpsCallable callable =
+      cf.getHttpsCallable(functionName: 'getGeoMessagesInProximity');
       return await callable.call(<String, dynamic>
       {
         'lat': location.latitude,

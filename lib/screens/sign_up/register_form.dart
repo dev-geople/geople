@@ -4,7 +4,7 @@ import 'package:geople/app_localizations.dart';
 import 'package:geople/helper/validator.dart';
 import 'package:geople/router.dart';
 import 'package:geople/services/authentication.dart';
-import 'package:geople/services/user_dto.dart';
+import 'package:geople/repositories/firebase/user_repository.dart';
 import 'package:geople/widgets/form_text_field.dart';
 import 'package:geople/widgets/rounded_buttons.dart';
 

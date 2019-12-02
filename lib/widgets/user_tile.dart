@@ -3,7 +3,7 @@ import 'package:geople/model/GeopleUser.dart';
 import 'package:geople/model/Message.dart';
 import 'package:geople/repositories/local/messages_repository.dart';
 import 'package:geople/screens/chat/arguments.dart';
-import 'package:geople/services/user_dto.dart';
+import 'package:geople/repositories/firebase/user_repository.dart';
 import 'package:geople/widgets/profile_picture.dart';
 import 'package:intl/intl.dart';
 
@@ -179,7 +179,6 @@ class _UserTileLastMessageState extends State<UserTileLastMessage> {
         .then((geopleUser) {
       if (this.mounted)
         setState(() {
-          print(geopleUser.username);
           this.user = geopleUser;
         });
     });

@@ -26,6 +26,9 @@ class Geople extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp (
+      debugShowCheckedModeBanner: false,
+      debugShowMaterialGrid: false,
+      showSemanticsDebugger: false,
       title: 'Geople',
       theme: lightTheme,
       onGenerateRoute: router.generateRoute,

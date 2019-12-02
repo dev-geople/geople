@@ -40,4 +40,12 @@ class UserDTO {
     });
   }
 
+  Future<String> setStatus(String uid, String status) async {
+    await Firestore.instance.collection(USER_COLLECTION).document(uid)
+        .updateData({
+      'status': status,
+    });
+    return status;
+  }
+
 }

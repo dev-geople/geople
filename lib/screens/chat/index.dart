@@ -7,7 +7,7 @@ import 'package:geople/router.dart';
 import 'package:geople/screens/chat/arguments.dart';
 import 'package:geople/screens/chat/widgets/message.dart';
 import 'package:geople/services/geople_cloud_functions.dart';
-import 'package:geople/services/user_dto.dart';
+import 'package:geople/repositories/firebase/user_repository.dart';
 import 'package:after_layout/after_layout.dart';
 
 //TODO: Beim Empfangen einer Nachricht, diese anzeigen.
