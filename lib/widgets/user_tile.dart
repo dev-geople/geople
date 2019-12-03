@@ -1,9 +1,11 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:geople/model/GeopleUser.dart';
 import 'package:geople/model/Message.dart';
 import 'package:geople/repositories/local/messages_repository.dart';
 import 'package:geople/screens/chat/arguments.dart';
 import 'package:geople/repositories/firebase/user_repository.dart';
+import 'package:geople/services/geople_cloud_functions.dart';
 import 'package:geople/widgets/profile_picture.dart';
 import 'package:intl/intl.dart';
 
@@ -87,9 +89,11 @@ class _FriendTileState extends State<FriendTile> {
   final String uid;
   final bool pending;
   GeopleUser user;
+  GeopleCloudFunctions cloudFunctions;
 
   @override
   void initState() {
+    cloudFunctions = new GeopleCloudFunctions();
     UserDTO dto = UserDTO();
     dto.getGeopleUser(uid).then((geopleUser) {
       if (this.mounted)
@@ -125,7 +129,8 @@ class _FriendTileState extends State<FriendTile> {
                     IconButton(
                       icon: Icon(Icons.check),
                       onPressed: () {
-                        print('add friend'); //Todo: remove friend
+                        cloudFunctions.confirmFriendRequest(uid);
+                        //TODO  aktualisieren
                       },
                     ),
                     IconButton(

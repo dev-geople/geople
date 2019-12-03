@@ -31,6 +31,24 @@ class GeopleCloudFunctions {
     }
   }
 
+  confirmFriendRequest(String requestUid) async {
+    try {
+      HttpsCallable callable =
+      cf.getHttpsCallable(functionName: 'confirmFriendRequest');
+      return await callable.call(<String, dynamic>
+      {
+        'request_uid': requestUid,
+      });
+    } on CloudFunctionsException catch (e) {
+      print('CLOUD FUNCTIONS EXCEPTION');
+      print(e.code);
+      print(e.message);
+      print(e.details);
+    } catch (e) {
+      print('GENERIC EXCEPTION');
+    }
+  }
+
   sendMessage(String toUid, String message) async {
     try {
       HttpsCallable callable =
