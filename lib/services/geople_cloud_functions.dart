@@ -54,6 +54,7 @@ class GeopleCloudFunctions {
     try {
       HttpsCallable callable =
       cf.getHttpsCallable(functionName: 'sendGeoMessage');
+      print('sendGeoMessage\nMessage: ' + message + '\nLocation: ' + location.toString());
       return await callable.call(<String, dynamic>
       {
         'message': message,
