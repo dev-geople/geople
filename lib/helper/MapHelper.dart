@@ -40,7 +40,7 @@ class MapHelper {
       if(element != null){
         var messageData = element['data'];
         _markers.add(Marker(
-            markerId: MarkerId(element['uid']),
+            markerId: MarkerId('message-'+element['uid']),
             position: LatLng(
                 messageData['location']['_latitude'],
                 messageData['location']['_longitude']

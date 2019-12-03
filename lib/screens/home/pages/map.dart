@@ -152,8 +152,7 @@ class _MapPageState extends State<MapPage> {
               _radius)
           .then((result) {
         _markers = MapHelper.createMarkersFromHttpsResult(result, context);
-        cf
-            .getGeoMessagesInProximity(
+        cf.getGeoMessagesInProximity(
                 Location(
                     latitude: position.latitude, longitude: position.longitude),
                 _radius)
