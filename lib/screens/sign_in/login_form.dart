@@ -1,10 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geople/app_localizations.dart';
+import 'package:geople/repositories/firebase/user_repository.dart';
 import 'package:geople/router.dart';
 import 'package:geople/services/authentication.dart';
-import 'package:geople/services/notification_manager.dart';
-import 'package:geople/repositories/firebase/user_repository.dart';
 import 'package:geople/widgets/form_text_field.dart';
 import 'package:geople/widgets/rounded_buttons.dart';
 
@@ -48,49 +47,52 @@ class LoginFormState extends State<LoginForm> {
     );
 
     return Container(
-        margin: EdgeInsets.symmetric(horizontal: 20),
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-        /*decoration: BoxDecoration(
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      /*decoration: BoxDecoration(
                     border: Border.all(),
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                   ),*/
-        child: Column(
-          children: <Widget>[
-            Text(AppLocalizations.of(context).translate('login_label'), style: Theme.of(context).textTheme.title,),
-            _loginForm,
-            Center(
-              child: RoundedButtonPrimary(
-                translatorKey: 'login_button_text',
-                onPressed: () {
-                  //Hide Keyboard
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  // Validation
-                  if(_formKey.currentState.validate()) {
-                    //Sign in
-                    widget._auth.signIn(
-                        _formControllers['email'].text,
-                        _formControllers['password'].text
-                    ).then((uid) async {
-                      if (uid != null) {
-                        UserDTO _dto = UserDTO();
-                        FirebaseMessaging _messager = FirebaseMessaging();
-                        _dto.saveToken(uid, await _messager.getToken());
-                        Navigator.of(context).popAndPushNamed(Routes.HOME);
-                      }
-                    }).catchError((e) =>
-                        print(e.toString())); // Todo: Fehlermeldungen
-                  }
-                },
-              ),
+      child: Column(
+        children: <Widget>[
+          Text(
+            AppLocalizations.of(context).translate('login_label'),
+            style: Theme.of(context).textTheme.title,
+          ),
+          _loginForm,
+          Center(
+            child: RoundedButtonPrimary(
+              translatorKey: 'login_button_text',
+              onPressed: () {
+                //Hide Keyboard
+                FocusScope.of(context).requestFocus(FocusNode());
+                // Validation
+                if (_formKey.currentState.validate()) {
+                  //Sign in
+                  widget._auth
+                      .signIn(_formControllers['email'].text,
+                          _formControllers['password'].text)
+                      .then((uid) async {
+                    if (uid != null) {
+                      UserDTO _dto = UserDTO();
+                      FirebaseMessaging _messager = FirebaseMessaging();
+                      _dto.saveToken(uid, await _messager.getToken());
+                      Navigator.of(context).popAndPushNamed(Routes.HOME);
+                    }
+                  }).catchError(
+                          (e) => print(e.toString())); // Todo: Fehlermeldungen
+                }
+              },
             ),
-            Center(
-              child: RoundedButtonSecondary(
-                translatorKey: 'create_account_button_text',
-                onPressed: () => Navigator.of(context).pushNamed(Routes.SIGN_UP),
-              ),
+          ),
+          Center(
+            child: RoundedButtonSecondary(
+              translatorKey: 'create_account_button_text',
+              onPressed: () => Navigator.of(context).pushNamed(Routes.SIGN_UP),
             ),
-          ],
-        )
+          ),
+        ],
+      ),
     );
   }
 

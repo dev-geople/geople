@@ -25,7 +25,7 @@ Future main() async {
 class Geople extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp (
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       debugShowMaterialGrid: false,
       showSemanticsDebugger: false,
@@ -50,7 +50,8 @@ class Geople extends StatelessWidget {
       localeResolutionCallback: (locale, supportedLocales) {
         // Check if the current device locale is supported
         for (var supportedLocale in supportedLocales) {
-          if (locale != null && (supportedLocale.languageCode == locale.languageCode)) {
+          if (locale != null &&
+              (supportedLocale.languageCode == locale.languageCode)) {
             return supportedLocale;
           }
         }

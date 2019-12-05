@@ -33,7 +33,9 @@ class _ChatsPageState extends State<ChatsPage> {
         _chats.add(UserTileLastMessage(
           lastMessage: e,
           onDeletePressed: () {
-            Navigator.of(context).pushNamed(Routes.CHAT, arguments: ChatScreenArguments(uid: e.chatPartner, deleteChat: true));
+            Navigator.of(context).pushNamed(Routes.CHAT,
+                arguments:
+                ChatScreenArguments(uid: e.chatPartner, deleteChat: true));
           },
         ));
       });
@@ -52,19 +54,21 @@ class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).backgroundColor,
+      color: Theme
+          .of(context)
+          .backgroundColor,
       child: (_chats.length > 0)
           ? ListView.builder(
-              itemBuilder: (_, int index) => _chats.toList()[index],
-              itemCount: _chats.length,
-            )
+        itemBuilder: (_, int index) => _chats.toList()[index],
+        itemCount: _chats.length,
+      )
           : ((_noMessages)
-              ? Center(
-                  child: Text('no messages'),
-                ) //Todo: translate ("info_no_chats");
+          ? Center(
+            child: Text('no messages'),
+          ) //Todo: translate ("info_no_chats");
               : Center(
-                  child: CircularProgressIndicator(),
-                )),
+            child: CircularProgressIndicator(),
+          )),
     );
   }
 }

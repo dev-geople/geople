@@ -2,13 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geople/model/Location.dart';
+import 'package:geople/screens/home/pages/exports.dart';
 import 'package:geople/screens/home/widgets/bottom_app_bar.dart';
 import 'package:geople/services/authentication.dart';
 import 'package:geople/services/geople_cloud_functions.dart';
 import 'package:geople/services/notification_manager.dart';
-
-import 'package:geople/screens/home/widgets/floating_action_button_builder.dart';
-import 'package:geople/screens/home/pages/exports.dart';
 import 'package:geople/widgets/meatball_menu_main.dart';
 
 /// Widget für die Homepage der App. Sie ist 'Stateful' was bedeutet, dass es

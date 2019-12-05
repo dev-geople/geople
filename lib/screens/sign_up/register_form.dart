@@ -39,7 +39,8 @@ class _RegisterFormState extends State<RegisterForm> {
             // ignore: missing_return
             additionalValidation: (value) {
               if (!validator.validateUsername(value)) {
-                return AppLocalizations.of(context).translate('error_unmet_username_policy');
+                return AppLocalizations.of(context)
+                    .translate('error_unmet_username_policy');
               }
             },
           ),
@@ -51,8 +52,9 @@ class _RegisterFormState extends State<RegisterForm> {
             keyboardType: TextInputType.emailAddress,
             // ignore: missing_return
             additionalValidation: (value) {
-              if(!validator.validateEmail(value))
-                return AppLocalizations.of(context).translate('error_unmet_email_policy');
+              if (!validator.validateEmail(value))
+                return AppLocalizations.of(context)
+                    .translate('error_unmet_email_policy');
             },
           ),
           FormTextfield(
@@ -63,8 +65,9 @@ class _RegisterFormState extends State<RegisterForm> {
             hide: true,
             // ignore: missing_return
             additionalValidation: (value) {
-              if(!validator.validatePassword(value))
-                return AppLocalizations.of(context).translate('error_unmet_password_policy');
+              if (!validator.validatePassword(value))
+                return AppLocalizations.of(context)
+                    .translate('error_unmet_password_policy');
             },
           ),
           FormTextfield(
@@ -76,8 +79,10 @@ class _RegisterFormState extends State<RegisterForm> {
             hide: true,
             // ignore: missing_return
             additionalValidation: (value) {
-              if(!validator.validatePasswordMatch(value, _formControllers['password'].text))
-                return AppLocalizations.of(context).translate('error_passwords_match');
+              if (!validator.validatePasswordMatch(
+                  value, _formControllers['password'].text))
+                return AppLocalizations.of(context)
+                    .translate('error_passwords_match');
             },
           ),
         ],
@@ -103,15 +108,19 @@ class _RegisterFormState extends State<RegisterForm> {
               if (_formKey.currentState.validate()) {
                 Auth _auth = Auth();
                 //TODO: Validate
-                _auth.signUp(
+                _auth
+                    .signUp(
                   _formControllers['email'].text,
                   _formControllers['password'].text,
-                ).then((uid) {
+                )
+                    .then((uid) {
                   UserDTO _dao = UserDTO();
                   FirebaseMessaging _messager = FirebaseMessaging();
                   _messager.getToken().then((token) {
-                    _dao.createUser(uid, _formControllers['username'].text, token)
-                    .then((ref) {
+                    _dao
+                        .createUser(
+                            uid, _formControllers['username'].text, token)
+                        .then((ref) {
                       Navigator.of(context).pushReplacementNamed(Routes.HOME);
                     });
                   });
@@ -123,7 +132,7 @@ class _RegisterFormState extends State<RegisterForm> {
           RoundedButtonSecondary(
             translatorKey: 'cancel_button_text',
             onPressed: () => Navigator.of(context).pop(),
-          )
+          ),
         ],
       ),
     );

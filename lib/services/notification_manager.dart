@@ -13,8 +13,7 @@ class NotificationService {
 
   factory NotificationService() => _instance;
 
-  static final NotificationService _instance =
-      NotificationService._();
+  static final NotificationService _instance = NotificationService._();
 
   final MessageRepository _repo = MessageRepository();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -27,17 +26,17 @@ class NotificationService {
       _firebaseMessaging.onTokenRefresh.listen((newToken) {
         UserDTO dto = new UserDTO();
         Auth auth = new Auth();
-        auth.getCurrentUser()
+        auth
+            .getCurrentUser()
             .then((user) => dto.saveToken(user.uid, newToken))
             .catchError((error) => print('GeopleError: ' + error.toString()));
       });
 
       _firebaseMessaging.configure(
-        onMessage: _onMessage,
-        //Todo: onBackgroundMessage: Einkommende Nachrichten speichern
-        onResume: _onResume,
-        onLaunch: _onLaunch
-      );
+          onMessage: _onMessage,
+          //Todo: onBackgroundMessage: Einkommende Nachrichten speichern
+          onResume: _onResume,
+          onLaunch: _onLaunch);
     }
 
     _firebaseMessaging.getToken().then((token) {
@@ -49,7 +48,6 @@ class NotificationService {
 
     _initialized = true;
   }
-
 
   Future<void> _onLaunch(Map<String, dynamic> message) {
     //Todo: Navigate

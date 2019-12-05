@@ -23,9 +23,8 @@ class MessageRepository {
     var databasesPath = await getDatabasesPath();
     this.path = databasesPath + this.fileName; //Todo: möglicherweise Fehler (/)
     this.db = await openDatabase(path, version: 1,
-      onCreate: (Database db, int version) async {
-        await db.execute(
-          '''
+        onCreate: (Database db, int version) async {
+      await db.execute('''
           CREATE TABLE $TABLE_MESSAGES (
             $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             $COLUMN_FROM TEXT NOT NULL,
@@ -34,14 +33,12 @@ class MessageRepository {
             $COLUMN_TIMESTAMP TEXT NOT NULL,
             $COLUMN_CHAT_PARTNER TEXT NOT NULL
           )
-          '''
-        );
-      }
-    );
+          ''');
+    });
   }
 
   Future<Message> saveMessage(Message message) async {
-    if(db != null) {
+    if (db != null) {
       await db.insert(TABLE_MESSAGES, message.toMap());
       print('MESSAGE SAVED: $message.$toString()');
       return message;
@@ -52,7 +49,8 @@ class MessageRepository {
     return message;
   }
 
-  Future<Message> saveMessageFromNotification(Map<String, dynamic> message) async {
+  Future<Message> saveMessageFromNotification(
+      Map<String, dynamic> message) async {
     Message msgToSave = Message.fromNotification(message);
     await saveMessage(msgToSave);
     return msgToSave;
@@ -60,15 +58,22 @@ class MessageRepository {
 
   Future<List<Message>> getMessagesOfUser(String uid) async {
     List<Message> messages = new List<Message>();
-    if(db == null) await this.initilizeDB();
-    List<Map> maps = await db.query(TABLE_MESSAGES,
-      columns: [COLUMN_CHAT_PARTNER, COLUMN_FROM, COLUMN_MESSAGE, COLUMN_TIMESTAMP, COLUMN_TO],
+    if (db == null) await this.initilizeDB();
+    List<Map> maps = await db.query(
+      TABLE_MESSAGES,
+      columns: [
+        COLUMN_CHAT_PARTNER,
+        COLUMN_FROM,
+        COLUMN_MESSAGE,
+        COLUMN_TIMESTAMP,
+        COLUMN_TO
+      ],
       where: '$COLUMN_FROM = ? OR $COLUMN_TO = ?',
       whereArgs: [uid, uid],
     );
-    if(maps.length > 0) {
-      maps.forEach((e){
-          messages.add(Message.fromMap(e));
+    if (maps.length > 0) {
+      maps.forEach((e) {
+        messages.add(Message.fromMap(e));
       });
       return messages;
     }
@@ -77,22 +82,27 @@ class MessageRepository {
 
   Future<List<Message>> getChatList() async {
     List<Message> messages = new List<Message>();
-    if(db == null) await this.initilizeDB();
+    if (db == null) await this.initilizeDB();
     List<Map> maps = await db.query(TABLE_MESSAGES,
-      columns: [COLUMN_CHAT_PARTNER, COLUMN_FROM, COLUMN_MESSAGE, COLUMN_TIMESTAMP, COLUMN_TO],
-      orderBy: COLUMN_TIMESTAMP + ' DESC',
-      groupBy: COLUMN_CHAT_PARTNER
-    );
+        columns: [
+          COLUMN_CHAT_PARTNER,
+          COLUMN_FROM,
+          COLUMN_MESSAGE,
+          COLUMN_TIMESTAMP,
+          COLUMN_TO
+        ],
+        orderBy: COLUMN_TIMESTAMP + ' DESC',
+        groupBy: COLUMN_CHAT_PARTNER);
     bool add = true;
-    if(maps.length > 0) {
-      maps.forEach((e){
+    if (maps.length > 0) {
+      maps.forEach((e) {
         add = true;
-        messages.forEach((ee){
-          if(ee.chatPartner == e[COLUMN_CHAT_PARTNER]){
+        messages.forEach((ee) {
+          if (ee.chatPartner == e[COLUMN_CHAT_PARTNER]) {
             add = false;
           }
         });
-        if(add) messages.add(Message.fromMap(e));
+        if (add) messages.add(Message.fromMap(e));
       });
       return messages;
     }
@@ -100,9 +110,10 @@ class MessageRepository {
   }
 
   Future<int> deleteMessagesOfUser(String uid) async {
-    if(db == null) await this.initilizeDB();
+    if (db == null) await this.initilizeDB();
 
-    return await db.delete(TABLE_MESSAGES,
+    return await db.delete(
+      TABLE_MESSAGES,
       where: '$COLUMN_CHAT_PARTNER = ?',
       whereArgs: [uid],
     );
@@ -110,13 +121,20 @@ class MessageRepository {
 
   Future<bool> printMessages(String uid) async {
     List<Message> messages = new List<Message>();
-    List<Map> maps = await db.query(TABLE_MESSAGES,
-      columns: [COLUMN_CHAT_PARTNER, COLUMN_FROM, COLUMN_MESSAGE, COLUMN_TIMESTAMP, COLUMN_TO],
+    List<Map> maps = await db.query(
+      TABLE_MESSAGES,
+      columns: [
+        COLUMN_CHAT_PARTNER,
+        COLUMN_FROM,
+        COLUMN_MESSAGE,
+        COLUMN_TIMESTAMP,
+        COLUMN_TO
+      ],
       where: '$COLUMN_FROM = ? or $COLUMN_TO = ?',
       whereArgs: [uid, uid],
     );
-    if(maps.length > 0) {
-      maps.forEach((e){
+    if (maps.length > 0) {
+      maps.forEach((e) {
         messages.add(Message.fromMap(e));
       });
     }

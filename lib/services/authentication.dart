@@ -21,7 +21,7 @@ abstract class BaseAuth {
 class Auth implements BaseAuth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-   /// Meldet User mit Email und Passwort an und gibt User-ID zurück.
+  /// Meldet User mit Email und Passwort an und gibt User-ID zurück.
   Future<String> signIn(String email, String password) async {
     AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
@@ -48,7 +48,7 @@ class Auth implements BaseAuth {
   /// der Fall ist.
   Future<void> ensureIsLoggedIn(BuildContext context) async {
     FirebaseUser user = await _firebaseAuth.currentUser();
-    if(user == null) {
+    if (user == null) {
       Navigator.of(context).pushReplacementNamed(Routes.SIGN_IN);
     }
   }

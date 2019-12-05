@@ -6,9 +6,7 @@ import 'package:geople/helper/MapHelper.dart';
 import 'package:geople/model/Location.dart';
 import 'package:geople/services/authentication.dart';
 import 'package:geople/services/geople_cloud_functions.dart';
-import 'package:geople/widgets/form_text_field.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:toast/toast.dart';
 
 class MapPage extends StatefulWidget {
   static final INITIAL_ZOOM = 15.0;
@@ -120,7 +118,7 @@ class _MapPageState extends State<MapPage> {
                   _buildOfGeolocatorState();
                 },
               ),
-            )
+            ),
           ],
         ),
       ),

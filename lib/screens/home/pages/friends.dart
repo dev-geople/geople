@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geople/model/GeopleUser.dart';
 import 'package:geople/repositories/firebase/friends_repository.dart';
 import 'package:geople/widgets/user_tile.dart';
 
@@ -35,8 +34,8 @@ class _FriendsPageState extends State<FriendsPage> {
         itemCount: _friends.length,
       )
           : ((_noFriends)
-          ? Center(child: Text('no messages',)) //Todo: translate ("info_no_chats");
-          : Center(child: CircularProgressIndicator(),))
+            ? Center(child: Text('no messages',)) //Todo: translate ("info_no_chats");
+            : Center(child: CircularProgressIndicator(),))
     );
   }
 }

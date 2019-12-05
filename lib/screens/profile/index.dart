@@ -4,7 +4,6 @@ import 'package:geople/screens/profile/widgets/profile_actions.dart';
 import 'package:geople/screens/profile/widgets/profile_header.dart';
 import 'package:geople/repositories/firebase/user_repository.dart';
 
-
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({this.uid});
 
@@ -41,22 +40,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return SafeArea(
         top: false,
         child: Scaffold(
-            appBar: AppBar(
-              title: Text(_user.username ?? 'Profile'),
-            ),
-            body: Column(
-              children: <Widget>[
-                ProfileHeader(user: _user),
-                Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: ProfileActions(user: _user),
-                    ),
-                  ],
-                )
-              ],
-            )
+          appBar: AppBar(
+            title: Text(_user.username ?? 'Profile'),
+          ),
+          body: Column(
+            children: <Widget>[
+              ProfileHeader(user: _user),
+              Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: ProfileActions(user: _user),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       );
     return Text('');

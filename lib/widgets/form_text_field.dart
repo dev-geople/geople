@@ -51,9 +51,8 @@ class FormTextfield extends StatelessWidget {
         // ignore: missing_return
         validator: (value) {
           if (value.isEmpty && isMandatory) {
-            return AppLocalizations.of(context)
-                .translate('error_empty');
-          } else if(additionalValidation != null){
+            return AppLocalizations.of(context).translate('error_empty');
+          } else if (additionalValidation != null) {
             String _errorMessage = this.additionalValidation(value);
             return _errorMessage;
           }

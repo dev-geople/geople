@@ -11,21 +11,21 @@ class GeopleCloudFunctions {
 
   static final GeopleCloudFunctions _instance = GeopleCloudFunctions._();
 
-  CloudFunctions cf = CloudFunctions(app: FirebaseApp.instance, region: FUNCTIONS_REGION);
+  CloudFunctions cf =
+      CloudFunctions(app: FirebaseApp.instance, region: FUNCTIONS_REGION);
 
   sendFriendRequest(String requestUid) async {
     try {
       HttpsCallable callable =
           cf.getHttpsCallable(functionName: 'sendFriendRequest');
-      return await callable.call(<String, dynamic>
-      {
+      return await callable.call(<String, dynamic>{
         'request_uid': requestUid,
       });
     } on CloudFunctionsException catch (e) {
-        print('CLOUD FUNCTIONS EXCEPTION');
-        print(e.code);
-        print(e.message);
-        print(e.details);
+      print('CLOUD FUNCTIONS EXCEPTION');
+      print(e.code);
+      print(e.message);
+      print(e.details);
     } catch (e) {
       print('GENERIC EXCEPTION');
     }
@@ -34,9 +34,8 @@ class GeopleCloudFunctions {
   confirmFriendRequest(String requestUid) async {
     try {
       HttpsCallable callable =
-      cf.getHttpsCallable(functionName: 'confirmFriendRequest');
-      return await callable.call(<String, dynamic>
-      {
+          cf.getHttpsCallable(functionName: 'confirmFriendRequest');
+      return await callable.call(<String, dynamic>{
         'request_uid': requestUid,
       });
     } on CloudFunctionsException catch (e) {
@@ -51,18 +50,16 @@ class GeopleCloudFunctions {
 
   sendMessage(String toUid, String message) async {
     try {
-      HttpsCallable callable =
-      cf.getHttpsCallable(functionName: 'sendMessage');
-      return await callable.call(<String, dynamic>
-      {
+      HttpsCallable callable = cf.getHttpsCallable(functionName: 'sendMessage');
+      return await callable.call(<String, dynamic>{
         'message': message,
         'recepient_uid': toUid,
       });
     } on CloudFunctionsException catch (e) {
-        print('CLOUD FUNCTIONS EXCEPTION');
-        print(e.code);
-        print(e.message);
-        print(e.details);
+      print('CLOUD FUNCTIONS EXCEPTION');
+      print(e.code);
+      print(e.message);
+      print(e.details);
     } catch (e) {
       print('GENERIC EXCEPTION');
     }
@@ -71,10 +68,12 @@ class GeopleCloudFunctions {
   sendGeoMessage(Location location, String message) async {
     try {
       HttpsCallable callable =
-      cf.getHttpsCallable(functionName: 'sendGeoMessage');
-      print('sendGeoMessage\nMessage: ' + message + '\nLocation: ' + location.toString());
-      return await callable.call(<String, dynamic>
-      {
+          cf.getHttpsCallable(functionName: 'sendGeoMessage');
+      print('sendGeoMessage\nMessage: ' +
+          message +
+          '\nLocation: ' +
+          location.toString());
+      return await callable.call(<String, dynamic>{
         'message': message,
         'lat': location.latitude,
         'lng': location.longitude,
@@ -89,12 +88,12 @@ class GeopleCloudFunctions {
     }
   }
 
-  Future<HttpsCallableResult> getUserListInProximity(Location location, double radius) async {
+  Future<HttpsCallableResult> getUserListInProximity(
+      Location location, double radius) async {
     try {
-      HttpsCallable callable = 
+      HttpsCallable callable =
           cf.getHttpsCallable(functionName: 'getUserListInProximity');
-      return await callable.call(<String, dynamic>
-      {
+      return await callable.call(<String, dynamic>{
         'lat': location.latitude,
         'lng': location.longitude,
         'radius': radius,
@@ -109,12 +108,12 @@ class GeopleCloudFunctions {
     }
   }
 
-  Future<HttpsCallableResult> getGeoMessagesInProximity(Location location, double radius) async {
+  Future<HttpsCallableResult> getGeoMessagesInProximity(
+      Location location, double radius) async {
     try {
       HttpsCallable callable =
-      cf.getHttpsCallable(functionName: 'getGeoMessagesInProximity');
-      return await callable.call(<String, dynamic>
-      {
+          cf.getHttpsCallable(functionName: 'getGeoMessagesInProximity');
+      return await callable.call(<String, dynamic>{
         'lat': location.latitude,
         'lng': location.longitude,
         'radius': radius,

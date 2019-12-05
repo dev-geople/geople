@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:geople/services/authentication.dart';
-
 import '../router.dart';
 
 class MeatballMenuMain extends StatelessWidget {
@@ -13,8 +11,11 @@ class MeatballMenuMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<Choice>(
-      icon: Icon((Platform.isIOS) ? Icons.more_horiz : Icons.more_vert,
-        color: Theme.of(context).primaryColor,),
+      icon: Icon(
+        (Platform.isIOS) ? Icons.more_horiz : Icons.more_vert,
+        color: Theme.of(context).primaryColor,
+      ),
+
       /// Wenn auf eines der Menuitems getappt wird, wird diese Methode
       /// aufgerufen und als wert die Choice mitgegeben.
       onSelected: _onSelectMenu,
@@ -34,15 +35,15 @@ class MeatballMenuMain extends StatelessWidget {
 
   void _onSelectMenu(Choice choice) {
     //TOdo: REMOVE
-    if(choice.route == Routes.PROFILE) {
+    if (choice.route == Routes.PROFILE) {
       Auth _auth = new Auth();
-      _auth.getCurrentUser().then((user){
+      _auth.getCurrentUser().then((user) {
         Navigator.of(context).pushNamed(choice.route, arguments: user.uid);
       });
       return;
     }
     //Todo: remove
-    if(choice.route == '/sign_out') {
+    if (choice.route == '/sign_out') {
       Auth _auth = Auth();
       _auth.signOut();
       Navigator.of(context).pushReplacementNamed(Routes.SIGN_IN);
