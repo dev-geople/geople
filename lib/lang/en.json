@@ -1,4 +1,9 @@
 {
+  "yes": "YES",
+  "no": "NO",
+  "cancel": "CANCEL",
+  "set": "SET",
+
   "helloWorld": "Hello World in English!",
   "username_label": "Username",
   "email_label": "Email",
@@ -19,5 +24,13 @@
   "error_passwords_match": "passwords don't match!",
   "error_unmet_username_policy": "Username must have at least 5 Characters!",
 
-  "info_no_messages": "No messages yet"
+  "info_no_messages": "No messages yet",
+  "info_no_chats": "No chats yet",
+  "info_no_friends": "No friends yet :(",
+  "info_localization_off": "LocationService is not enabled",
+
+  "hint_write_text": "Write a Message",
+
+  "popup_title_delete": "Delete chat",
+  "popup_body_delete": "Delete chat permanently?"
 }

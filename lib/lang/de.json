@@ -1,4 +1,9 @@
 {
+  "yes": "JA",
+  "no": "NEIN",
+  "cancel": "ABBRECHEN",
+  "set": "SPEICHERN",
+
   "helloWorld": "Hallo Welt in Deutsch!",
   "username_label": "Nutzername",
   "email_label": "Email",
@@ -19,5 +24,13 @@
   "error_passwords_match": "Passwörter stimmen nicht überein!",
   "error_unmet_username_policy": "Der Nutzername muss aus mindestens 5 Zeichen bestehen!",
 
-  "info_no_messages": "Noch keine Nachrichten"
+  "info_no_messages": "Noch keine Nachrichten",
+  "info_no_chats": "Du hast noch keine Chats",
+  "info_no_friends": "Du hast noch keine Freunde :(",
+  "info_localization_off": "GPS ist deaktiviert",
+
+  "hint_write_text": "Schreibe eine Nachricht",
+
+  "popup_title_delete": "Chatverlauf löschen",
+  "popup_body_delete": "Möchten Sie den Chatverlauf wirklich löschen?"
 }

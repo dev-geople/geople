@@ -1,14 +1,14 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:geople/app_localizations.dart';
 import 'package:geople/model/GeopleUser.dart';
 import 'package:geople/model/Message.dart';
+import 'package:geople/repositories/firebase/user_repository.dart';
 import 'package:geople/repositories/local/messages_repository.dart';
 import 'package:geople/router.dart';
 import 'package:geople/screens/chat/arguments.dart';
 import 'package:geople/screens/chat/widgets/message.dart';
 import 'package:geople/services/geople_cloud_functions.dart';
-import 'package:geople/repositories/firebase/user_repository.dart';
-import 'package:after_layout/after_layout.dart';
 
 //TODO: Beim Empfangen einer Nachricht, diese anzeigen.
 
@@ -23,7 +23,8 @@ class ChatScreen extends StatefulWidget {
   }
 }
 
-class _ChatScreenState extends State<ChatScreen> with AfterLayoutMixin<ChatScreen>{
+class _ChatScreenState extends State<ChatScreen>
+    with AfterLayoutMixin<ChatScreen> {
   GeopleUser _user;
   GeopleCloudFunctions _cloudFunctions = GeopleCloudFunctions();
   MessageRepository _messageRepository = MessageRepository();
@@ -44,21 +45,20 @@ class _ChatScreenState extends State<ChatScreen> with AfterLayoutMixin<ChatScree
         user.toObject(snapshot.data);
         user.uid = widget.arguments.uid;
         //Todo: onerror
-        _messageRepository.getMessagesOfUser(user.uid)
-            .then((messageList) {
-              if(messageList != null) {
-                _messages.clear();
-                messageList.forEach((msg) {
-                  _messages.add(MessageWidget(
-                    message: msg,
-                  ));
-                });
-              }
-              setState(() {
-                _user = user;
-                _messages = _messages;
-              });
+        _messageRepository.getMessagesOfUser(user.uid).then((messageList) {
+          if (messageList != null) {
+            _messages.clear();
+            messageList.forEach((msg) {
+              _messages.add(MessageWidget(
+                message: msg,
+              ));
             });
+          }
+          setState(() {
+            _user = user;
+            _messages = _messages;
+          });
+        });
       }
     });
     super.initState();
@@ -69,7 +69,6 @@ class _ChatScreenState extends State<ChatScreen> with AfterLayoutMixin<ChatScree
     _showDeleteDialog();
   }
 
-
   TextEditingController _controller = TextEditingController();
 
   @override
@@ -78,37 +77,38 @@ class _ChatScreenState extends State<ChatScreen> with AfterLayoutMixin<ChatScree
       top: false,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_user!=null ? _user.username : ''),
+          title: Text(_user != null ? _user.username : ''),
         ),
         body: Column(
           children: <Widget>[
             Flexible(
               child: (_user != null)
-              ? Container(
-                color: Theme.of(context).backgroundColor,
-                child: (_messages.length > 0)
-                ? ListView.builder(
-                      padding: EdgeInsets.all(8.0),
-                      reverse: true,
-                      itemBuilder: (_, int index) =>
-                      _messages.reversed.toList()[index],
-                      itemCount: _messages.length,
+                  ? Container(
+                      color: Theme.of(context).backgroundColor,
+                      child: (_messages.length > 0)
+                          ? ListView.builder(
+                              padding: EdgeInsets.all(8.0),
+                              reverse: true,
+                              itemBuilder: (_, int index) =>
+                                  _messages.reversed.toList()[index],
+                              itemCount: _messages.length,
+                            )
+                          : SizedBox(
+                              width: double.infinity,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .translate('info_no_messages'),
+                                    style: Theme.of(context).textTheme.body1,
+                                  ),
+                                ],
+                              ),
+                            ),
                     )
-                : SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Text(
-                          AppLocalizations.of(context).translate('info_no_messages'),
-                          style: Theme.of(context).textTheme.body1,
-                        ),
-                      ]
-                  ),
-                )
-              )
-              : Center(child: CircularProgressIndicator()),
+                  : Center(child: CircularProgressIndicator()),
             ),
             new Divider(
               height: 1.0,
@@ -123,65 +123,69 @@ class _ChatScreenState extends State<ChatScreen> with AfterLayoutMixin<ChatScree
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Flexible(
-                      child: TextField(
-                    minLines: 1,
-                    maxLines: 5,
-                    style: TextStyle(fontSize: 18),
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      hintText: 'Text', //Todo: Übersetzen
-                      contentPadding: EdgeInsets.only(
-                        top: 5,
-                        bottom: 10,
+                    child: TextField(
+                      minLines: 1,
+                      maxLines: 5,
+                      style: TextStyle(fontSize: 18),
+                      controller: _controller,
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context)
+                            .translate('hint_write_text'),
+                        contentPadding: EdgeInsets.only(
+                          top: 5,
+                          bottom: 10,
+                        ),
                       ),
                     ),
-                  )),
+                  ),
                   SizedBox(
                     width: 50,
                     child: FlatButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
                       onPressed: (this._user != null)
                           ? () {
-                        Message msgToSend = Message(
-                          from: Message.ME,
-                          to: _user.uid,
-                          message: _controller.text,
-                          timestamp: DateTime.now().toIso8601String(),
-                          chatPartner: _user.uid
-                        );
+                              Message msgToSend = Message(
+                                  from: Message.ME,
+                                  to: _user.uid,
+                                  message: _controller.text,
+                                  timestamp: DateTime.now().toIso8601String(),
+                                  chatPartner: _user.uid);
 
-                        _cloudFunctions.sendMessage(_user.uid, _controller.text);
-                        _messageRepository.saveMessage(msgToSend)
-                            .then((msg) {
-                              setState(() {
-                                _messages.add(MessageWidget(message: msg));
+                              _cloudFunctions.sendMessage(
+                                  _user.uid, _controller.text);
+                              _messageRepository
+                                  .saveMessage(msgToSend)
+                                  .then((msg) {
+                                setState(() {
+                                  _messages.add(MessageWidget(message: msg));
+                                });
                               });
-                            });
-                          _controller.clear();
-                      }
+                              _controller.clear();
+                            }
                           : null,
-                        child: (this._user != null)
-                            ? Container(
-                                  color: Colors.amber,
-                                  child: SizedBox(
-                                    height: 25,
-                                    width: 25,
-                                    child: Icon(Icons.send),
-                                  ),
-                                )
-                            : Container(
-                                color: Colors.red,
-                                child: SizedBox(
-                                  width: 25,
-                                  height: 25,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation(
-                                      Theme.of(context).primaryColor,
-                                    ),
-                                  ),
+                      child: (this._user != null)
+                          ? Container(
+                              color: Colors.amber,
+                              child: SizedBox(
+                                height: 25,
+                                width: 25,
+                                child: Icon(Icons.send),
                               ),
-                        )
-                    )
+                            )
+                          : Container(
+                              color: Colors.red,
+                              child: SizedBox(
+                                width: 25,
+                                height: 25,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation(
+                                    Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                    ),
                   ),
                 ],
               ),
@@ -195,27 +199,35 @@ class _ChatScreenState extends State<ChatScreen> with AfterLayoutMixin<ChatScree
   void _deleteMessagesAndRedirect(BuildContext context) {
     MessageRepository repo = MessageRepository();
     repo.deleteMessagesOfUser(widget.arguments.uid).then((_) {
-      Navigator.of(context).popAndPushNamed(Routes.HOME); //Todo: Redirect to Chatlist
+      Navigator.of(context)
+          .popAndPushNamed(Routes.HOME); //Todo: Redirect to Chatlist
     });
   }
 
-  _showDeleteDialog(){
+  _showDeleteDialog() {
     if (widget.arguments.deleteChat) {
       showDialog(
         barrierDismissible: false,
         context: context,
         builder: (_) => AlertDialog(
-          title: Text('Löschen'), //Todo: übersetzen
-          content: Text('wirklich löschen?'),
+          title: Text(
+            AppLocalizations.of(context).translate('popup_title_delete'),
+          ),
+          content: Text(
+            AppLocalizations.of(context).translate('popup_body_delete'),
+          ),
           actions: <Widget>[
             FlatButton(
-                child: Text('No'),
+                child: Text(
+                  AppLocalizations.of(context).translate('no'),
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
-                }
-            ),
+                }),
             FlatButton(
-              child: Text('Yes'),
+              child: Text(
+                AppLocalizations.of(context).translate('yes'),
+              ),
               onPressed: () {
                 _deleteMessagesAndRedirect(this.context);
               },
@@ -225,5 +237,4 @@ class _ChatScreenState extends State<ChatScreen> with AfterLayoutMixin<ChatScree
       );
     }
   }
-
 }

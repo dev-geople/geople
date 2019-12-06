@@ -3,6 +3,7 @@ import 'package:geople/model/GeopleUser.dart';
 import 'package:geople/screens/chat/arguments.dart';
 import 'package:geople/services/authentication.dart';
 import 'package:geople/services/geople_cloud_functions.dart';
+import 'package:geople/widgets/rounded_buttons.dart';
 
 import '../../../router.dart';
 
@@ -45,7 +46,9 @@ class _ProfileActionsState extends State<ProfileActions> {
   Widget buildSelfActions() {
     return Column(
       children: <Widget>[
-        //Todo:
+        RoundedButtonPrimary(
+          translatorKey: 'change_password',
+        )
       ],
     );
   }

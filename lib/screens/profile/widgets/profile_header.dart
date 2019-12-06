@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geople/app_localizations.dart';
 import 'package:geople/model/GeopleUser.dart';
 import 'package:geople/repositories/firebase/user_repository.dart';
 import 'package:geople/services/authentication.dart';
@@ -99,19 +100,24 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                   ),
                                   actions: <Widget>[
                                     FlatButton(
-                                      child: Text('CANCEL'), //Todo: translate
+                                      child: Text(AppLocalizations.of(context)
+                                          .translate('cancel')),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
                                     ),
                                     FlatButton(
-                                      child: Text("SET"), //Todo: translate
+                                      child: Text(AppLocalizations.of(context)
+                                          .translate('set')),
                                       onPressed: () {
                                         UserDTO repo = UserDTO();
                                         Auth auth = Auth();
-                                        if(_statusController.text.length > 0) {
+                                        if (_statusController.text.length > 0) {
                                           auth.getCurrentUser().then((user) {
-                                            repo.setStatus(user.uid, _statusController.text).then((newStatus){
+                                            repo
+                                                .setStatus(user.uid,
+                                                    _statusController.text)
+                                                .then((newStatus) {
                                               setState(() {
                                                 _status = newStatus;
                                               });

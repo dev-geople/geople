@@ -2,18 +2,17 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geople/app_localizations.dart';
 import 'package:geople/helper/MapHelper.dart';
 import 'package:geople/model/Location.dart';
 import 'package:geople/services/authentication.dart';
 import 'package:geople/services/geople_cloud_functions.dart';
-import 'package:geople/widgets/form_text_field.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:toast/toast.dart';
 
 class MapPage extends StatefulWidget {
-  static final INITIAL_ZOOM = 15.0;
-  static final INITIAL_POSITION = LatLng(46.948, 7.44744); //Bern
-  static final UPDATE_TIMER = 10; //In seconds
+  static const INITIAL_ZOOM = 15.0;
+  static const INITIAL_POSITION = LatLng(46.948, 7.44744); //Bern
+  static const UPDATE_TIMER = 10; //In seconds
 
   @override
   State<StatefulWidget> createState() {
@@ -106,7 +105,7 @@ class _MapPageState extends State<MapPage> {
               size: 100,
             ),
             Text(
-              "LocationService is not enabled", //Todo: translate
+              AppLocalizations.of(context).translate('info_localization_off'),
               style: Theme.of(context).textTheme.body1,
             ),
             Padding(
@@ -120,7 +119,7 @@ class _MapPageState extends State<MapPage> {
                   _buildOfGeolocatorState();
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -146,13 +145,15 @@ class _MapPageState extends State<MapPage> {
     GeopleCloudFunctions cf = GeopleCloudFunctions();
     Auth auth = Auth();
     _getUserLocation().then((position) {
-      cf.getUserListInProximity(
+      cf
+          .getUserListInProximity(
               Location(
                   latitude: position.latitude, longitude: position.longitude),
               _radius)
           .then((result) {
         _markers = MapHelper.createMarkersFromHttpsResult(result, context);
-        cf.getGeoMessagesInProximity(
+        cf
+            .getGeoMessagesInProximity(
                 Location(
                     latitude: position.latitude, longitude: position.longitude),
                 _radius)
