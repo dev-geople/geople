@@ -231,7 +231,7 @@ class _ChatScreenState extends State<ChatScreen>
               onPressed: () {
                 _deleteMessagesAndRedirect(this.context);
               },
-            )
+            ),
           ],
         ),
       );

@@ -36,6 +36,9 @@ class _ChatsPageState extends State<ChatsPage> {
           onDeletePressed: () {
             Navigator.of(context).pushNamed(Routes.CHAT,
                 arguments:
+                ChatScreenArguments(uid: e.chatPartner, deleteChat: true));
+            Navigator.of(context).pushNamed(Routes.CHAT,
+                arguments:
                     ChatScreenArguments(uid: e.chatPartner, deleteChat: true));
           },
         ));
@@ -58,9 +61,9 @@ class _ChatsPageState extends State<ChatsPage> {
       color: Theme.of(context).backgroundColor,
       child: (_chats.length > 0)
           ? ListView.builder(
-              itemBuilder: (_, int index) => _chats.toList()[index],
-              itemCount: _chats.length,
-            )
+        itemBuilder: (_, int index) => _chats.toList()[index],
+        itemCount: _chats.length,
+      )
           : ((_noMessages)
               ? Center(
                   child: Text(

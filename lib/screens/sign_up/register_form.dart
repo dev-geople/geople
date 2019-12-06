@@ -114,20 +114,15 @@ class _RegisterFormState extends State<RegisterForm> {
                   _formControllers['password'].text,
                 )
                     .then((uid) {
-                  _auth.getCurrentUser().then((user) {
-                    if (user != null) {
-                      UserDTO _dao = UserDTO();
-                      FirebaseMessaging _messager = FirebaseMessaging();
-                      _messager.getToken().then((token) {
-                        _dao
-                            .createUser(
-                                uid, _formControllers['username'].text, token)
-                            .then((ref) {
-                          Navigator.of(context)
-                              .pushReplacementNamed(Routes.HOME);
-                        });
-                      });
-                    }
+                  UserDTO _dao = UserDTO();
+                  FirebaseMessaging _messager = FirebaseMessaging();
+                  _messager.getToken().then((token) {
+                    _dao
+                        .createUser(
+                            uid, _formControllers['username'].text, token)
+                        .then((ref) {
+                      Navigator.of(context).pushReplacementNamed(Routes.HOME);
+                    });
                   });
                 }).catchError(
                         (e) => print(e.toString())); // Todo: Fehlermeldungen

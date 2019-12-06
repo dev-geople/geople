@@ -13,12 +13,12 @@ class _LoginScreenState extends State<LoginScreen> {
       top: false,
       bottom: false,
       child: Scaffold(
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              LoginForm(),
-            ],
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            LoginForm(),
+          ],
         ),
       ),
     );

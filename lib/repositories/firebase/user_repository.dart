@@ -11,13 +11,16 @@ class UserDTO {
       'status': 'Hello I\'m a Geople',
     };
 
-    DocumentReference userDocument = Firestore.instance.document(USER_COLLECTION + "/" + uid );
+    DocumentReference userDocument =
+        Firestore.instance.document(USER_COLLECTION + "/" + uid);
 
     return userDocument.setData(user);
   }
 
   Future<void> saveToken(String uid, String token) {
-    return Firestore.instance.collection(USER_COLLECTION).document(uid)
+    return Firestore.instance
+        .collection(USER_COLLECTION)
+        .document(uid)
         .updateData({
       'token': token,
     });
@@ -27,25 +30,27 @@ class UserDTO {
     return Firestore.instance.collection(USER_COLLECTION).document(uid).get();
   }
 
-  Future<GeopleUser> getGeopleUser(String uid) async{
+  Future<GeopleUser> getGeopleUser(String uid) async {
     return this.getUserDetails(uid).then((snapshot) {
       GeopleUser user = GeopleUser();
       var data = snapshot.data;
-      if(data.containsKey('username')) user.username = data['username'];
-      if(data.containsKey('profilePicUrl')) user.profilePicUrl = data['profilePicUrl'];
-      if(data.containsKey('token')) user.token = data['token'];
-      if(data.containsKey('status')) user.status = data['status'];
+      if (data.containsKey('username')) user.username = data['username'];
+      if (data.containsKey('profilePicUrl'))
+        user.profilePicUrl = data['profilePicUrl'];
+      if (data.containsKey('token')) user.token = data['token'];
+      if (data.containsKey('status')) user.status = data['status'];
 
       return user;
     });
   }
 
   Future<String> setStatus(String uid, String status) async {
-    await Firestore.instance.collection(USER_COLLECTION).document(uid)
+    await Firestore.instance
+        .collection(USER_COLLECTION)
+        .document(uid)
         .updateData({
       'status': status,
     });
     return status;
   }
-
 }

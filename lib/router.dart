@@ -30,15 +30,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => DebugScreen());
     case Routes.CHAT:
       ChatScreenArguments arguments = settings.arguments;
-      return MaterialPageRoute(builder: (context) => ChatScreen(arguments: arguments));
+      return MaterialPageRoute(
+          builder: (context) => ChatScreen(arguments: arguments));
     case Routes.PROFILE:
       var uid = settings.arguments;
       return MaterialPageRoute(builder: (context) => ProfileScreen(uid: uid));
     case Routes.SETTINGS:
       return MaterialPageRoute(builder: (context) => SettingsScreen());
     default:
-     // return MaterialPageRoute(builder: (context) => HomeScreen());
+      // return MaterialPageRoute(builder: (context) => HomeScreen());
       return null;
   }
 }
-

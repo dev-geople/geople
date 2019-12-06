@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 import 'Location.dart';
 import 'Model.dart';
 
@@ -30,8 +28,11 @@ class GeopleUser extends Model {
     this.profilePicUrl = map['profilePicUrl'];
     this.status = map['status'];
     this.geohash = map['geohash'];
-    this.location = Location(latitude: map['latitude'], longitude: map['longitude']);
-    this.locationTime = map.containsKey('location_timestamp') ? map['location_timestamp'].toDate() : null;
+    this.location =
+        Location(latitude: map['latitude'], longitude: map['longitude']);
+    this.locationTime = map.containsKey('location_timestamp')
+        ? map['location_timestamp'].toDate()
+        : null;
   }
 
   @override

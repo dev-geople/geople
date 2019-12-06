@@ -30,53 +30,54 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return SafeArea(
       top: false,
       child: Scaffold(
-          appBar: AppBar(
-            title: Text('Settings'),
-          ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: Card(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Radius',
-                              textAlign: TextAlign.left,
-                              style: Theme.of(context).textTheme.title,
-                            ),
-                            Text(
-                              '${_sliderValue.toInt()} m',
-                              textAlign: TextAlign.right,
-                              style: Theme.of(context).textTheme.title,
-                            )
-                          ],
-                        ),
+        appBar: AppBar(
+          title: Text('Settings'),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(5),
+              child: Card(
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Radius',
+                            textAlign: TextAlign.left,
+                            style: Theme.of(context).textTheme.title,
+                          ),
+                          Text(
+                            '${_sliderValue.toInt()} m',
+                            textAlign: TextAlign.right,
+                            style: Theme.of(context).textTheme.title,
+                          )
+                        ],
                       ),
-                      Slider(
-                        activeColor: Colors.indigoAccent,
-                        min: 0.0,
-                        max: 50000000.0,
-                        onChanged: (newRadius) async {
-                          setState(() => _sliderValue = newRadius);
-                          final prefs = await SharedPreferences.getInstance();
-                          prefs.setInt("Radius", newRadius.toInt());
-                        },
-                        value: _sliderValue,
-                      ),
-                    ],
-                  ),
+                    ),
+                    Slider(
+                      activeColor: Colors.indigoAccent,
+                      min: 0.0,
+                      max: 50000000.0,
+                      onChanged: (newRadius) async {
+                        setState(() => _sliderValue = newRadius);
+                        final prefs = await SharedPreferences.getInstance();
+                        prefs.setInt("Radius", newRadius.toInt());
+                      },
+                      value: _sliderValue,
+                    ),
+                  ],
                 ),
-              )
-            ],
-          )),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

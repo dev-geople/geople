@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geople/app_localizations.dart';
 import 'package:geople/repositories/firebase/friends_repository.dart';
 import 'package:geople/widgets/user_tile.dart';
 
