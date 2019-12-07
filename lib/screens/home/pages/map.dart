@@ -38,7 +38,6 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     /// ProgressIndicator anzeigen.
-    _radius = 0;
     super.initState();
   }
 
@@ -48,8 +47,9 @@ class _MapPageState extends State<MapPage> {
     // _ghost = Prjid
     // _evaluateGhostMode();
     /// Marker aktualisieren und einen Timer erstellen um Marker zu aktualisieren.
-    _updateMarkers();
+    _radius = 0;
     _startTimer();
+    _updateMarkers();
 
     _buildOfGeolocatorState();
 
@@ -229,6 +229,7 @@ class _MapPageState extends State<MapPage> {
             }
           });
         }
+        print(_radius);
         cf.getUserListInProximity(
             Location(
                 latitude: position.latitude, longitude: position.longitude),
