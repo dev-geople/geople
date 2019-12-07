@@ -5,9 +5,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geople/app_localizations.dart';
 import 'package:geople/helper/MapHelper.dart';
 import 'package:geople/model/Location.dart';
+import 'package:geople/repositories/firebase/user_repository.dart';
 import 'package:geople/services/authentication.dart';
 import 'package:geople/services/geople_cloud_functions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MapPage extends StatefulWidget {
   static const INITIAL_ZOOM = 15.0;
@@ -23,9 +25,11 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
   Geolocator _geolocator = Geolocator();
-  double _radius = 10000000; //Todo: Read
+  double _radius = 0;
   bool _locationServiceEnabled = false;
   Timer _updateTimer;
+  bool _ghost = false;
+  bool _isUpdating = false;
 
   Set<Marker> _markers = Set.of([
     Marker(markerId: MarkerId('testMarker')),
@@ -34,15 +38,18 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     /// ProgressIndicator anzeigen.
+    _radius = 0;
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
+    //Todo: Aus PrefReferences ghostmode lesen
+    // _ghost = Prjid
+    // _evaluateGhostMode();
     /// Marker aktualisieren und einen Timer erstellen um Marker zu aktualisieren.
     _updateMarkers();
-    _updateTimer = Timer.periodic(Duration(seconds: MapPage.UPDATE_TIMER),
-        (Timer timer) => _updateMarkers());
+    _startTimer();
 
     _buildOfGeolocatorState();
 
@@ -53,6 +60,11 @@ class _MapPageState extends State<MapPage> {
   dispose() {
     _updateTimer.cancel();
     super.dispose();
+  }
+
+  _startTimer() {
+    _updateTimer = Timer.periodic(Duration(seconds: MapPage.UPDATE_TIMER),
+            (Timer timer) => _updateMarkers());
   }
 
   _buildOfGeolocatorState() {
@@ -77,15 +89,54 @@ class _MapPageState extends State<MapPage> {
       children: <Widget>[
         (!_locationServiceEnabled)
             ? _buildLocationServiceNotEnabled()
-            : GoogleMap(
-                markers: _markers,
-                myLocationEnabled: true,
-                rotateGesturesEnabled: true,
-                onMapCreated: _onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  target: MapPage.INITIAL_POSITION,
-                  zoom: MapPage.INITIAL_ZOOM,
-                ),
+            : Stack(
+                children: <Widget>[
+                  GoogleMap(
+                    markers: _markers,
+                    myLocationEnabled: true,
+                    rotateGesturesEnabled: true,
+                    onMapCreated: _onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      target: MapPage.INITIAL_POSITION,
+                      zoom: MapPage.INITIAL_ZOOM,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Column(
+                      children: <Widget>[
+                          Material(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                          child: IconButton(
+                            iconSize: 27,
+                            icon: Icon(
+                              !_ghost ? Icons.location_on : Icons.location_off,
+                              color:  !_ghost ? Colors.black : Colors.black54 ,
+                            ),
+                            onPressed: () {
+                              _ghost = !_ghost;
+                              _evaluateGhostMode();
+                            },
+                          ),
+                        ),
+                        Visibility(
+                          visible: _isUpdating,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: SizedBox(
+                              width: 25,
+                              height: 25,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ),
+                ],
               ),
       ],
     );
@@ -126,6 +177,25 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
+  void _evaluateGhostMode() {
+    setState(() {
+      if(_ghost) {
+        _markers.clear();
+        _updateTimer.cancel();
+        _isUpdating = false;
+
+        UserDTO repo = UserDTO();
+        Auth auth = Auth();
+        auth.getCurrentUser().then((user) {
+          repo.clearLocation(user.uid);
+        });
+      } else {
+        _updateMarkers();
+        _startTimer();
+      }
+    });
+  }
+
   void _animateCameraToPosition(LatLng position) async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
@@ -142,30 +212,44 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _updateMarkers() {
+    setState(() {
+      _isUpdating = true;
+    });
     GeopleCloudFunctions cf = GeopleCloudFunctions();
     Auth auth = Auth();
-    _getUserLocation().then((position) {
-      cf
-          .getUserListInProximity(
+    if(mounted) {
+      _getUserLocation().then((position) async {
+        if(_radius == 0) {
+          await SharedPreferences.getInstance().then((pref) {
+            int value = pref.getInt("Radius");
+            if (value != null) {
+              setState(() {
+                _radius = (value).toDouble()*1000;
+              });
+            }
+          });
+        }
+        cf.getUserListInProximity(
+            Location(
+                latitude: position.latitude, longitude: position.longitude),
+            _radius)
+            .then((result) {
+          _markers = MapHelper.createMarkersFromHttpsResult(result, context);
+          cf.getGeoMessagesInProximity(
               Location(
                   latitude: position.latitude, longitude: position.longitude),
               _radius)
-          .then((result) {
-        _markers = MapHelper.createMarkersFromHttpsResult(result, context);
-        cf
-            .getGeoMessagesInProximity(
-                Location(
-                    latitude: position.latitude, longitude: position.longitude),
-                _radius)
-            .then((result) {
-          auth.getCurrentUser().then((user) {
-            setState(() {
-              _markers.addAll(MapHelper.createMarkersFromGeoMessagesHttpsResult(
-                  result, context, user.uid));
+              .then((result) {
+            auth.getCurrentUser().then((user) {
+              setState(() {
+                if(!_ghost)
+                  _markers.addAll(MapHelper.createMarkersFromGeoMessagesHttpsResult(result, context, user.uid));
+                _isUpdating = false;
+              });
             });
           });
         });
       });
-    });
+    }
   }
 }

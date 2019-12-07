@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:geople/repositories/firebase/friends_repository.dart';
 import 'package:geople/widgets/user_tile.dart';
 
+import '../../../app_localizations.dart';
+
 class FriendsPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -46,6 +48,6 @@ class _FriendsPageState extends State<FriendsPage> {
                   )
                 : Center(
                     child: CircularProgressIndicator(),
-                  )));
+                  )),);
   }
 }

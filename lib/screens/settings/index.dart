@@ -10,19 +10,19 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  double _sliderValue = 500;
+  double _sliderValue = 1.0;
 
   @override
   void initState() {
-    super.initState();
     SharedPreferences.getInstance().then((pref) {
       int value = pref.getInt("Radius");
       if (value != null) {
         setState(() {
-          _sliderValue = value.toDouble();
+          _sliderValue = (value).toDouble();
         });
       }
     });
+    super.initState();
   }
 
   @override
@@ -53,7 +53,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             style: Theme.of(context).textTheme.title,
                           ),
                           Text(
-                            '${_sliderValue.toInt()} m',
+                            '${_sliderValue.toInt()} km',
                             textAlign: TextAlign.right,
                             style: Theme.of(context).textTheme.title,
                           )
@@ -62,8 +62,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     Slider(
                       activeColor: Colors.indigoAccent,
-                      min: 0.0,
-                      max: 50000000.0,
+                      min: 1.0,
+                      max: 10.0,
                       onChanged: (newRadius) async {
                         setState(() => _sliderValue = newRadius);
                         final prefs = await SharedPreferences.getInstance();

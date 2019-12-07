@@ -34,11 +34,13 @@ class UserDTO {
     return this.getUserDetails(uid).then((snapshot) {
       GeopleUser user = GeopleUser();
       var data = snapshot.data;
-      if (data.containsKey('username')) user.username = data['username'];
-      if (data.containsKey('profilePicUrl'))
-        user.profilePicUrl = data['profilePicUrl'];
-      if (data.containsKey('token')) user.token = data['token'];
-      if (data.containsKey('status')) user.status = data['status'];
+      if(snapshot.data != null) {
+        if (data.containsKey('username')) user.username = data['username'];
+        if (data.containsKey('profilePicUrl'))
+          user.profilePicUrl = data['profilePicUrl'];
+        if (data.containsKey('token')) user.token = data['token'];
+        if (data.containsKey('status')) user.status = data['status'];
+      }
 
       return user;
     });
@@ -52,5 +54,16 @@ class UserDTO {
       'status': status,
     });
     return status;
+  }
+
+  Future<void> clearLocation(String uid) async {
+    await Firestore.instance
+        .collection(USER_COLLECTION)
+        .document(uid)
+        .updateData({
+      'geohash': null,
+      'location': null,
+      'location_timestamp': null
+    });
   }
 }
