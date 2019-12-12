@@ -106,7 +106,9 @@ class _FriendTileState extends State<FriendTile> {
   Widget build(BuildContext context) {
     if (user != null) {
       return Material(
-        color: (pending) ? Theme.of(context).accentColor :Theme.of(context).cardColor,
+        color: (pending)
+            ? Theme.of(context).accentColor
+            : Theme.of(context).cardColor,
         elevation: 3,
         child: ListTile(
           onTap: () {
@@ -175,11 +177,7 @@ class _UserTileLastMessageState extends State<UserTileLastMessage> {
   @override
   void initState() {
     UserDTO dto = UserDTO();
-    dto
-        .getGeopleUser(_lastMessage.from != Message.ME
-            ? _lastMessage.from
-            : _lastMessage.to)
-        .then((geopleUser) {
+    dto.getGeopleUser(_lastMessage.chatPartner).then((geopleUser) {
       if (this.mounted)
         setState(() {
           this.user = geopleUser;

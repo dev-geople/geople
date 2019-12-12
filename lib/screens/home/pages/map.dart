@@ -63,16 +63,18 @@ class _MapPageState extends State<MapPage> {
   }
 
   _startTimer() {
-    _updateTimer = Timer.periodic(Duration(seconds: MapPage.UPDATE_TIMER),
-            (Timer timer) => _updateMarkers());
+    _updateTimer = Timer.periodic(Duration(seconds: MapPage.UPDATE_TIMER), (_) {
+      if (mounted) _updateMarkers();
+    });
   }
 
   _buildOfGeolocatorState() {
     /// Check ob LocationService an und erlaubt ist.
     _geolocator.isLocationServiceEnabled().then((enabled) {
-      setState(() {
-        _locationServiceEnabled = enabled;
-      });
+      if (mounted)
+        setState(() {
+          _locationServiceEnabled = enabled;
+        });
 
       if (_locationServiceEnabled) {
         _getUserLocation().then((position) {
@@ -102,40 +104,43 @@ class _MapPageState extends State<MapPage> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Column(
-                      children: <Widget>[
+                      padding: EdgeInsets.all(5),
+                      child: Column(
+                        children: <Widget>[
                           Material(
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                          child: IconButton(
-                            iconSize: 27,
-                            icon: Icon(
-                              !_ghost ? Icons.location_on : Icons.location_off,
-                              color:  !_ghost ? Colors.black : Colors.black54 ,
+                            elevation: 3,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25)),
+                            child: IconButton(
+                              iconSize: 27,
+                              icon: Icon(
+                                !_ghost
+                                    ? Icons.location_on
+                                    : Icons.location_off,
+                                color: !_ghost ? Colors.black : Colors.black54,
+                              ),
+                              onPressed: () {
+                                _ghost = !_ghost;
+                                _evaluateGhostMode();
+                              },
                             ),
-                            onPressed: () {
-                              _ghost = !_ghost;
-                              _evaluateGhostMode();
-                            },
                           ),
-                        ),
-                        Visibility(
-                          visible: _isUpdating,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: SizedBox(
-                              width: 25,
-                              height: 25,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+                          Visibility(
+                            visible: _isUpdating,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: SizedBox(
+                                width: 25,
+                                height: 25,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Theme.of(context).primaryColor),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                  ),
+                        ],
+                      )),
                 ],
               ),
       ],
@@ -178,22 +183,23 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _evaluateGhostMode() {
-    setState(() {
-      if(_ghost) {
-        _markers.clear();
-        _updateTimer.cancel();
-        _isUpdating = false;
+    if (mounted)
+      setState(() {
+        if (_ghost) {
+          _markers.clear();
+          _updateTimer.cancel();
+          _isUpdating = false;
 
-        UserDTO repo = UserDTO();
-        Auth auth = Auth();
-        auth.getCurrentUser().then((user) {
-          repo.clearLocation(user.uid);
-        });
-      } else {
-        _updateMarkers();
-        _startTimer();
-      }
-    });
+          UserDTO repo = UserDTO();
+          Auth auth = Auth();
+          auth.getCurrentUser().then((user) {
+            repo.clearLocation(user.uid);
+          });
+        } else {
+          _updateMarkers();
+          _startTimer();
+        }
+      });
   }
 
   void _animateCameraToPosition(LatLng position) async {
@@ -212,41 +218,49 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _updateMarkers() {
-    setState(() {
-      _isUpdating = true;
-    });
+    if (mounted)
+      setState(() {
+        _isUpdating = true;
+      });
     GeopleCloudFunctions cf = GeopleCloudFunctions();
     Auth auth = Auth();
-    if(mounted) {
+    if (mounted) {
       _getUserLocation().then((position) async {
-        if(_radius == 0) {
+        if (_radius == 0) {
           await SharedPreferences.getInstance().then((pref) {
             int value = pref.getInt("Radius");
             if (value != null) {
-              setState(() {
-                _radius = (value).toDouble()*1000;
-              });
+              if (mounted)
+                setState(() {
+                  _radius = (value).toDouble() * 1000;
+                });
             }
           });
         }
-        print(_radius);
-        cf.getUserListInProximity(
-            Location(
-                latitude: position.latitude, longitude: position.longitude),
-            _radius)
+        print(DateTime.now());
+        cf
+            .getUserListInProximity(
+                Location(
+                    latitude: position.latitude, longitude: position.longitude),
+                _radius)
             .then((result) {
           _markers = MapHelper.createMarkersFromHttpsResult(result, context);
-          cf.getGeoMessagesInProximity(
-              Location(
-                  latitude: position.latitude, longitude: position.longitude),
-              _radius)
+          cf
+              .getGeoMessagesInProximity(
+                  Location(
+                      latitude: position.latitude,
+                      longitude: position.longitude),
+                  _radius)
               .then((result) {
             auth.getCurrentUser().then((user) {
-              setState(() {
-                if(!_ghost)
-                  _markers.addAll(MapHelper.createMarkersFromGeoMessagesHttpsResult(result, context, user.uid));
-                _isUpdating = false;
-              });
+              if (mounted)
+                setState(() {
+                  if (!_ghost)
+                    _markers.addAll(
+                        MapHelper.createMarkersFromGeoMessagesHttpsResult(
+                            result, context, user.uid));
+                  _isUpdating = false;
+                });
             });
           });
         });

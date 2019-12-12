@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geople/router.dart';
@@ -44,7 +45,7 @@ class Auth implements BaseAuth {
     return user;
   }
 
-  /// Checkt ob der User eingellogt ist und leitet um, falls dies nicht
+  /// Checkt ob der User eingelogt ist und leitet um, falls dies nicht
   /// der Fall ist.
   Future<void> ensureIsLoggedIn(BuildContext context) async {
     FirebaseUser user = await _firebaseAuth.currentUser();

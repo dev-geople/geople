@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geople/app_localizations.dart';
 import 'package:geople/model/Message.dart';
-import 'package:geople/repositories/local/messages_repository.dart';
+import 'package:geople/repositories/firebase/message_repository.dart';
 import 'package:geople/router.dart';
 import 'package:geople/screens/chat/arguments.dart';
 import 'package:geople/widgets/user_tile.dart';
@@ -34,9 +34,6 @@ class _ChatsPageState extends State<ChatsPage> {
         _chats.add(UserTileLastMessage(
           lastMessage: e,
           onDeletePressed: () {
-            Navigator.of(context).pushNamed(Routes.CHAT,
-                arguments:
-                    ChatScreenArguments(uid: e.chatPartner, deleteChat: true));
             Navigator.of(context).pushNamed(Routes.CHAT,
                 arguments:
                     ChatScreenArguments(uid: e.chatPartner, deleteChat: true));

@@ -1,6 +1,6 @@
 import 'package:geople/model/Model.dart';
 
-class Message extends Model{
+class Message extends Model {
   static const ME = 'user_of_the_app';
 
   int id;
@@ -10,15 +10,13 @@ class Message extends Model{
   String timestamp;
   String chatPartner;
 
-  Message({
-    this.id,
-    this.message,
-    this.from,
-    this.to,
-    this.timestamp,
-    this.chatPartner
-  });
-
+  Message(
+      {this.id,
+      this.message,
+      this.from,
+      this.to,
+      this.timestamp,
+      this.chatPartner});
 
   @override
   void toObject(Map<String, dynamic> map) {
@@ -26,37 +24,26 @@ class Message extends Model{
     this.message = map['message'];
     this.from = map['message_from'];
     this.to = map['message_to'];
-    this.timestamp = map['timestamp'];
+    this.timestamp = map['timestamp'].toDate().toIso8601String();
+
     this.chatPartner = map['chat_partner'];
   }
 
-  static Message fromMap(Map<String, dynamic> map){
+  static Message fromMap(Map<String, dynamic> map) {
     Message message = Message(
       chatPartner: map['chat_partner'],
       id: map['id'],
-      message:  map['message'],
-      from:  map['message_from'],
+      message: map['message'],
+      from: map['message_from'],
       to: map['message_to'],
-      timestamp: map['timestamp'],
+      timestamp: map['timestamp'].toDate().toIso8601String(),
     );
     return message;
   }
 
-  static Message fromNotification(Map<String, dynamic> message) {
-    var notification = message['notification'];
-    var data = message['data'];
-    return Message(
-      from: data['sender'],
-      to: Message.ME,
-      message: notification['body'],
-      timestamp: DateTime.now().toIso8601String(),
-      chatPartner: data['sender'],
-    );
-  }
-
   @override
   Map<String, dynamic> toMap() {
-    var map = <String, dynamic> {
+    var map = <String, dynamic>{
       'chat_partner': this.chatPartner,
       'message': this.message,
       'message_from': this.from,

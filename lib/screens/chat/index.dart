@@ -1,13 +1,15 @@
 import 'package:after_layout/after_layout.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geople/app_localizations.dart';
 import 'package:geople/model/GeopleUser.dart';
 import 'package:geople/model/Message.dart';
+import 'package:geople/repositories/firebase/message_repository.dart';
 import 'package:geople/repositories/firebase/user_repository.dart';
-import 'package:geople/repositories/local/messages_repository.dart';
 import 'package:geople/router.dart';
 import 'package:geople/screens/chat/arguments.dart';
 import 'package:geople/screens/chat/widgets/message.dart';
+import 'package:geople/services/authentication.dart';
 import 'package:geople/services/geople_cloud_functions.dart';
 
 //TODO: Beim Empfangen einer Nachricht, diese anzeigen.
@@ -26,10 +28,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen>
     with AfterLayoutMixin<ChatScreen> {
   GeopleUser _user;
+  String _myUid;
   GeopleCloudFunctions _cloudFunctions = GeopleCloudFunctions();
-  MessageRepository _messageRepository = MessageRepository();
-
-  List<MessageWidget> _messages = List<MessageWidget>();
 
   @override
   void dispose() {
@@ -41,22 +41,15 @@ class _ChatScreenState extends State<ChatScreen>
     UserDTO _dto = UserDTO();
     _dto.getUserDetails(widget.arguments.uid).then((snapshot) {
       if (snapshot.data != null) {
+        Auth auth = Auth();
         GeopleUser user = GeopleUser();
         user.toObject(snapshot.data);
         user.uid = widget.arguments.uid;
-        //Todo: onerror
-        _messageRepository.getMessagesOfUser(user.uid).then((messageList) {
-          if (messageList != null) {
-            _messages.clear();
-            messageList.forEach((msg) {
-              _messages.add(MessageWidget(
-                message: msg,
-              ));
-            });
-          }
+        _user = user;
+        auth.getCurrentUser().then((user) {
           setState(() {
-            _user = user;
-            _messages = _messages;
+            _myUid = user.uid;
+            _user = _user;
           });
         });
       }
@@ -85,15 +78,19 @@ class _ChatScreenState extends State<ChatScreen>
               child: (_user != null)
                   ? Container(
                       color: Theme.of(context).backgroundColor,
-                      child: (_messages.length > 0)
-                          ? ListView.builder(
-                              padding: EdgeInsets.all(8.0),
-                              reverse: true,
-                              itemBuilder: (_, int index) =>
-                                  _messages.reversed.toList()[index],
-                              itemCount: _messages.length,
-                            )
-                          : SizedBox(
+                      child: StreamBuilder(
+                        stream: Firestore.instance
+                            .collection('chats')
+                            .document(_myUid)
+                            .collection('chatlist')
+                            .document(_user.uid)
+                            .collection('chat-history')
+                            .orderBy('timestamp', descending: true)
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (!snapshot.hasData)
+                            return SizedBox(
                               width: double.infinity,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -106,7 +103,23 @@ class _ChatScreenState extends State<ChatScreen>
                                   ),
                                 ],
                               ),
-                            ),
+                            );
+                          else
+                            return ListView(
+                              padding: EdgeInsets.all(8.0),
+                              reverse: true,
+                              children: snapshot.data.documents.map((document) {
+                                Message message = Message();
+                                message.toObject(document.data);
+                                print(message.toString());
+                                return MessageWidget(
+                                  message: message,
+                                  loggedUserUid: _myUid,
+                                );
+                              }).toList(),
+                            );
+                        },
+                      ),
                     )
                   : Center(child: CircularProgressIndicator()),
             ),
@@ -151,16 +164,8 @@ class _ChatScreenState extends State<ChatScreen>
                                   message: _controller.text,
                                   timestamp: DateTime.now().toIso8601String(),
                                   chatPartner: _user.uid);
-
                               _cloudFunctions.sendMessage(
                                   _user.uid, _controller.text);
-                              _messageRepository
-                                  .saveMessage(msgToSend)
-                                  .then((msg) {
-                                setState(() {
-                                  _messages.add(MessageWidget(message: msg));
-                                });
-                              });
                               _controller.clear();
                             }
                           : null,
@@ -198,7 +203,7 @@ class _ChatScreenState extends State<ChatScreen>
 
   void _deleteMessagesAndRedirect(BuildContext context) {
     MessageRepository repo = MessageRepository();
-    repo.deleteMessagesOfUser(widget.arguments.uid).then((_) {
+    repo.deleteChat(widget.arguments.uid).then((_) {
       Navigator.of(context)
           .popAndPushNamed(Routes.HOME); //Todo: Redirect to Chatlist
     });
