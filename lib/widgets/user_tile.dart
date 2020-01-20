@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geople/model/GeopleUser.dart';
 import 'package:geople/model/Message.dart';
+import 'package:geople/repositories/firebase/friends_repository.dart';
 import 'package:geople/repositories/firebase/user_repository.dart';
 import 'package:geople/screens/chat/arguments.dart';
 import 'package:geople/services/geople_cloud_functions.dart';
@@ -134,7 +135,8 @@ class _FriendTileState extends State<FriendTile> {
                     IconButton(
                       icon: Icon(Icons.close),
                       onPressed: () {
-                        print('refuse friend'); //Todo: remove friend
+                        FriendsRepository repo = FriendsRepository();
+                        repo.removeFriend(uid);
                       },
                     ),
                   ],
@@ -142,7 +144,8 @@ class _FriendTileState extends State<FriendTile> {
               : IconButton(
                   icon: Icon(Icons.close),
                   onPressed: () {
-                    print('delete friend'); //Todo: remove friend
+                    FriendsRepository repo = FriendsRepository();
+                    repo.removeFriend(uid);
                   }),
         ),
       );
@@ -208,7 +211,7 @@ class _UserTileLastMessageState extends State<UserTileLastMessage> {
             children: <Widget>[
               Text(_lastMessage.from == Message.ME
                   ? AppLocalizations.of(context).translate('you') ?? ''
-                  : ''),
+                  : '',),
               Text('(' +
                   DateFormat('dd.MM. kk:mm')
                       .format(DateTime.parse(_lastMessage.timestamp)) +

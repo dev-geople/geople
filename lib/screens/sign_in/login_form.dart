@@ -79,8 +79,8 @@ class LoginFormState extends State<LoginForm> {
                       _dto.saveToken(uid, await _messager.getToken());
                       Navigator.of(context).popAndPushNamed(Routes.HOME);
                     }
-                  }).catchError(
-                          (e) => print(e.toString())); // Todo: Fehlermeldungen
+                  }).catchError((e) => print(e.toString()));
+                  // Todo: Fehlermeldungen
                 }
               },
             ),

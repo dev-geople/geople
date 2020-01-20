@@ -9,6 +9,7 @@
   "email_label": "Email",
   "password_label": "Passwort",
   "confirm_password_label": "Passwort Bestätigen",
+  "change_password": "Passwort Ändern",
   "login_label": "Anmelden",
   "register_label": "Neuen Account erstellen",
   "you": "Du",
