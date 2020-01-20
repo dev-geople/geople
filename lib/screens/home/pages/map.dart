@@ -48,8 +48,8 @@ class _MapPageState extends State<MapPage> {
     // _evaluateGhostMode();
     /// Marker aktualisieren und einen Timer erstellen um Marker zu aktualisieren.
     _radius = 0;
-    _startTimer();
     _updateMarkers();
+    _startTimer();
 
     _buildOfGeolocatorState();
 
@@ -71,11 +71,9 @@ class _MapPageState extends State<MapPage> {
   _buildOfGeolocatorState() {
     /// Check ob LocationService an und erlaubt ist.
     _geolocator.isLocationServiceEnabled().then((enabled) {
-      if (mounted)
-        setState(() {
-          _locationServiceEnabled = enabled;
-        });
-
+      if (mounted) setState(() {
+        _locationServiceEnabled = enabled;
+      });
       if (_locationServiceEnabled) {
         _getUserLocation().then((position) {
           _animateCameraToPosition(
@@ -183,12 +181,11 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _evaluateGhostMode() {
-    if (mounted)
-      setState(() {
-        if (_ghost) {
-          _markers.clear();
-          _updateTimer.cancel();
-          _isUpdating = false;
+    if (mounted) setState(() {
+      if (_ghost) {
+        _markers.clear();
+        _updateTimer.cancel();
+        _isUpdating = false;
 
           UserDTO repo = UserDTO();
           Auth auth = Auth();
@@ -218,10 +215,9 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _updateMarkers() {
-    if (mounted)
-      setState(() {
-        _isUpdating = true;
-      });
+    if (mounted) setState(() {
+      _isUpdating = true;
+    });
     GeopleCloudFunctions cf = GeopleCloudFunctions();
     Auth auth = Auth();
     if (mounted) {
@@ -230,16 +226,14 @@ class _MapPageState extends State<MapPage> {
           await SharedPreferences.getInstance().then((pref) {
             int value = pref.getInt("Radius");
             if (value != null) {
-              if (mounted)
-                setState(() {
-                  _radius = (value).toDouble() * 1000;
-                });
+              if (mounted) setState(() {
+                _radius = (value).toDouble() * 1000;
+              });
             }
           });
         }
-        print(DateTime.now());
-        cf
-            .getUserListInProximity(
+        print(_radius);
+        cf.getUserListInProximity(
                 Location(
                     latitude: position.latitude, longitude: position.longitude),
                 _radius)
@@ -253,14 +247,13 @@ class _MapPageState extends State<MapPage> {
                   _radius)
               .then((result) {
             auth.getCurrentUser().then((user) {
-              if (mounted)
-                setState(() {
-                  if (!_ghost)
-                    _markers.addAll(
-                        MapHelper.createMarkersFromGeoMessagesHttpsResult(
-                            result, context, user.uid));
-                  _isUpdating = false;
-                });
+              if (mounted) setState(() {
+                if (!_ghost)
+                  _markers.addAll(
+                      MapHelper.createMarkersFromGeoMessagesHttpsResult(
+                          result, context, user.uid));
+                _isUpdating = false;
+              });
             });
           });
         });

@@ -34,7 +34,6 @@ class MeatballMenuMain extends StatelessWidget {
   }
 
   void _onSelectMenu(Choice choice) {
-    //TOdo: REMOVE
     if (choice.route == Routes.PROFILE) {
       Auth _auth = new Auth();
       _auth.getCurrentUser().then((user) {
@@ -42,7 +41,6 @@ class MeatballMenuMain extends StatelessWidget {
       });
       return;
     }
-    //Todo: remove
     if (choice.route == '/sign_out') {
       Auth _auth = Auth();
       _auth.signOut();
@@ -68,5 +66,5 @@ const List<Choice> choices = const <Choice>[
   const Choice(title: 'Profile', route: Routes.PROFILE),
   const Choice(title: 'Settings', route: Routes.SETTINGS),
   const Choice(title: 'Logout', route: '/sign_out'),
-  const Choice(title: '{DEBUG}', route: '/debug'),
+  //const Choice(title: '{DEBUG}', route: '/debug'),
 ];

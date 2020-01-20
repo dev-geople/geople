@@ -9,6 +9,7 @@
   "email_label": "Email",
   "password_label": "Password",
   "confirm_password_label": "Confirm Password",
+  "change_password": "Change Password",
   "login_label": "Login",
   "register_label": "Create Account",
   "you": "You",
