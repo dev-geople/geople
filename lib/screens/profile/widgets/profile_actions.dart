@@ -7,8 +7,9 @@ import 'package:geople/widgets/rounded_buttons.dart';
 
 import '../../../router.dart';
 
-class ProfileActions extends StatefulWidget{
+class ProfileActions extends StatefulWidget {
   ProfileActions({this.user});
+
   final GeopleUser user;
 
   @override
@@ -35,11 +36,12 @@ class _ProfileActionsState extends State<ProfileActions> {
 
   @override
   Widget build(BuildContext context) {
-    if(_isLoading) {
+    if (_isLoading) {
       return Center(child: CircularProgressIndicator());
-    } else if(_isMe) {
+    } else if (_isMe) {
       return buildSelfActions();
-    } else return buildOtherActions();
+    } else
+      return buildOtherActions();
   }
 
   /// Eigenes Profil.
@@ -61,65 +63,64 @@ class _ProfileActionsState extends State<ProfileActions> {
       children: <Widget>[
         Expanded(
             child: Padding(
-              padding: EdgeInsets.only(left: 15, right: 7.5),
-              child: OutlineButton(
-                child: Stack(
-                  children: <Widget>[
-                    Visibility(
-                      child: Text(
-                          _friendRequestSent ? 'PENDING' : 'ADD FRIEND'
-                      ),
-                      maintainSize: true,
-                      maintainAnimation: true,
-                      maintainSemantics: true,
-                      maintainState: true,
-                      maintainInteractivity: false,
-                      visible: !_isSendingFriendRequest,
-                    ),
-                    Visibility(
-                      child: Center(
-                        child: SizedBox(
-                          height: 28,
-                          width: 28,
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-                          ),
-                        ),
-                      ),
-                      visible: this._isSendingFriendRequest,
-                    ),
-                  ],
+          padding: EdgeInsets.only(left: 15, right: 7.5),
+          child: OutlineButton(
+            child: Stack(
+              children: <Widget>[
+                Visibility(
+                  child: Text(_friendRequestSent ? 'PENDING' : 'ADD FRIEND'),
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainSemantics: true,
+                  maintainState: true,
+                  maintainInteractivity: false,
+                  visible: !_isSendingFriendRequest,
                 ),
-                onPressed: this._isSendingFriendRequest ||
-                    this._friendRequestSent ? null : () {
-                  setState(() {
-                    this._isSendingFriendRequest = true;
-                  });
-                  GeopleCloudFunctions().sendFriendRequest(widget.user.uid)
-                      .then((result) {
-                    if (result.data != null) {
-                      setState(() {
-                        this._friendRequestSent = true;
-                        this._isSendingFriendRequest = false;
-                      });
-                    } else {
-                      print(result.toString());
-                    }
-                  });
-                },
-              ),
-            )
-        ),
+                Visibility(
+                  child: Center(
+                    child: SizedBox(
+                      height: 28,
+                      width: 28,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).primaryColor),
+                      ),
+                    ),
+                  ),
+                  visible: this._isSendingFriendRequest,
+                ),
+              ],
+            ),
+            onPressed: this._isSendingFriendRequest || this._friendRequestSent
+                ? null
+                : () {
+                    setState(() {
+                      this._isSendingFriendRequest = true;
+                    });
+                    GeopleCloudFunctions()
+                        .sendFriendRequest(widget.user.uid)
+                        .then((result) {
+                      if (result.data != null) {
+                        setState(() {
+                          this._friendRequestSent = true;
+                          this._isSendingFriendRequest = false;
+                        });
+                      } else {
+                        print(result.toString());
+                      }
+                    });
+                  },
+          ),
+        )),
         Expanded(
           child: Padding(
             padding: EdgeInsets.only(left: 7.5, right: 15),
             child: RaisedButton(
               child: Text("START CHAT"),
               onPressed: () {
-                Navigator.of(context).pushNamed(
-                    Routes.CHAT,
-                    arguments: ChatScreenArguments(uid: widget.user.uid, deleteChat: false)
-                );
+                Navigator.of(context).pushNamed(Routes.CHAT,
+                    arguments: ChatScreenArguments(
+                        uid: widget.user.uid, deleteChat: false));
               },
             ),
           ),

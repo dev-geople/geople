@@ -19,7 +19,7 @@ class RoundedButtonPrimary extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(50))),
           onPressed: this.onPressed,
           child:
-              Text(AppLocalizations.of(context).translate(this.translatorKey)),
+              Text(AppLocalizations.of(context).translate(this.translatorKey)??''),
         ),
       ),
     );
@@ -44,7 +44,7 @@ class RoundedButtonSecondary extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(50))),
           onPressed: this.onPressed,
           child: Text(
-            AppLocalizations.of(context).translate(this.translatorKey),
+            AppLocalizations.of(context).translate(this.translatorKey)??'',
           ),
         ),
       ),

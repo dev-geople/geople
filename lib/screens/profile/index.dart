@@ -43,19 +43,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           appBar: AppBar(
             title: Text(_user.username ?? 'Profile'),
           ),
-          body: Column(
-            children: <Widget>[
-              ProfileHeader(user: _user),
-              Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: ProfileActions(user: _user),
-                  ),
-                ],
-              ),
-            ],
-          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                ProfileHeader(user: _user),
+                Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: ProfileActions(user: _user),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          )
         ),
       );
     return Text('');

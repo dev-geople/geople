@@ -171,7 +171,6 @@ class _ChatScreenState extends State<ChatScreen>
                           : null,
                       child: (this._user != null)
                           ? Container(
-                              color: Colors.amber,
                               child: SizedBox(
                                 height: 25,
                                 width: 25,
@@ -179,9 +178,8 @@ class _ChatScreenState extends State<ChatScreen>
                               ),
                             )
                           : Container(
-                              color: Colors.red,
                               child: SizedBox(
-                                width: 25,
+                                width: 35,
                                 height: 25,
                                 child: CircularProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation(
